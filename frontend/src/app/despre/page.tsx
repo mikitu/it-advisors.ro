@@ -45,7 +45,7 @@ export default function DesprePage() {
                 { number: "24/7", label: "Suport disponibil" },
               ].map((stat) => (
                 <div key={stat.label} className="bg-gray-50 p-6 rounded-2xl text-center">
-                  <div className="text-3xl font-bold text-blue-600 mb-2">{stat.number}</div>
+                  <div className="text-3xl font-bold text-emerald-600 mb-2">{stat.number}</div>
                   <div className="text-sm text-gray-600">{stat.label}</div>
                 </div>
               ))}
@@ -117,14 +117,14 @@ export default function DesprePage() {
                   <span className="text-2xl">📞</span>
                   <div>
                     <div className="font-semibold">Telefon</div>
-                    <a href="tel:+40728691520" className="text-gray-400 hover:text-blue-400">+40 (728) 691 520</a>
+                    <a href="tel:+40728691520" className="text-gray-400 hover:text-emerald-400">+40 (728) 691 520</a>
                   </div>
                 </div>
                 <div className="flex items-start gap-4">
                   <span className="text-2xl">📧</span>
                   <div>
                     <div className="font-semibold">Email</div>
-                    <a href="mailto:contact@it-advisors.ro" className="text-gray-400 hover:text-blue-400">contact@it-advisors.ro</a>
+                    <a href="mailto:contact@it-advisors.ro" className="text-gray-400 hover:text-emerald-400">contact@it-advisors.ro</a>
                   </div>
                 </div>
               </div>
@@ -133,7 +133,7 @@ export default function DesprePage() {
               <p className="text-xl text-gray-300 mb-6">Pregătiți pentru o colaborare?</p>
               <Link
                 href="/contact"
-                className="inline-flex px-8 py-4 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 transition-colors"
+                className="inline-flex px-8 py-4 bg-emerald-600 text-white font-semibold rounded-xl hover:bg-emerald-700 transition-colors"
               >
                 Contactează-ne acum
               </Link>

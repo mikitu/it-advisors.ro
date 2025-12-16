@@ -119,19 +119,19 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
               </div>
             </div>
             <div>
-              <div className="sticky top-28 p-6 bg-blue-600 rounded-2xl text-white">
+              <div className="sticky top-28 p-6 bg-emerald-600 rounded-2xl text-white">
                 <h3 className="text-xl font-bold mb-4">Beneficii</h3>
                 <ul className="space-y-3 mb-6">
                   {service.benefits.map((benefit) => (
                     <li key={benefit} className="flex items-center gap-3">
-                      <svg className="w-5 h-5 text-cyan-300" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
+                      <svg className="w-5 h-5 text-teal-300" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
                       </svg>
                       {benefit}
                     </li>
                   ))}
                 </ul>
-                <Link href="/contact" className="block w-full py-3 bg-white text-blue-600 text-center font-semibold rounded-xl hover:bg-blue-50 transition-colors">
+                <Link href="/contact" className="block w-full py-3 bg-white text-emerald-600 text-center font-semibold rounded-xl hover:bg-emerald-50 transition-colors">
                   Solicită ofertă
                 </Link>
               </div>

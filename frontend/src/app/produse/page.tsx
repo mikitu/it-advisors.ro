@@ -50,7 +50,7 @@ export default function ProdusePage() {
           {products.map((category) => (
             <div key={category.category} className="mb-16 last:mb-0">
               <h2 className="text-2xl font-bold text-gray-900 mb-8 flex items-center gap-3">
-                <span className="w-12 h-1 bg-blue-600 rounded-full" />
+                <span className="w-12 h-1 bg-emerald-600 rounded-full" />
                 {category.category}
               </h2>
               <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -95,7 +95,7 @@ export default function ProdusePage() {
           </p>
           <Link
             href="/contact"
-            className="inline-flex px-8 py-4 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 transition-colors"
+            className="inline-flex px-8 py-4 bg-emerald-600 text-white font-semibold rounded-xl hover:bg-emerald-700 transition-colors"
           >
             Solicită ofertă
           </Link>

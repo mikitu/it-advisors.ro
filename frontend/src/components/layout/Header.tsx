@@ -28,7 +28,7 @@ export default function Header() {
         <div className="flex h-20 items-center justify-between">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-cyan-500 rounded-xl flex items-center justify-center">
+            <div className="w-10 h-10 bg-gradient-to-br from-emerald-600 to-teal-500 rounded-xl flex items-center justify-center">
               <span className="text-white font-bold text-lg">IT</span>
             </div>
             <div className="flex flex-col">
@@ -45,8 +45,8 @@ export default function Header() {
                 href={item.href}
                 className={`px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 ${
                   isActive(item.href)
-                    ? "text-blue-600 bg-blue-50"
-                    : "text-gray-700 hover:text-blue-600 hover:bg-blue-50"
+                    ? "text-emerald-600 bg-emerald-50"
+                    : "text-gray-700 hover:text-emerald-600 hover:bg-emerald-50"
                 }`}
               >
                 {item.name}
@@ -54,7 +54,7 @@ export default function Header() {
             ))}
             <Link
               href="/contact"
-              className="ml-4 px-5 py-2.5 bg-gradient-to-r from-blue-600 to-cyan-500 text-white text-sm font-semibold rounded-xl hover:shadow-lg hover:shadow-blue-500/25 transition-all duration-200"
+              className="ml-4 px-5 py-2.5 bg-gradient-to-r from-emerald-600 to-teal-500 text-white text-sm font-semibold rounded-xl hover:shadow-lg hover:shadow-emerald-500/25 transition-all duration-200"
             >
               Solicită ofertă
             </Link>
@@ -86,8 +86,8 @@ export default function Header() {
                   href={item.href}
                   className={`px-4 py-3 text-base font-medium rounded-lg ${
                     isActive(item.href)
-                      ? "text-blue-600 bg-blue-50"
-                      : "text-gray-700 hover:text-blue-600 hover:bg-blue-50"
+                      ? "text-emerald-600 bg-emerald-50"
+                      : "text-gray-700 hover:text-emerald-600 hover:bg-emerald-50"
                   }`}
                   onClick={() => setMobileMenuOpen(false)}
                 >
@@ -96,7 +96,7 @@ export default function Header() {
               ))}
               <Link
                 href="/contact"
-                className="mt-2 mx-4 px-5 py-3 bg-gradient-to-r from-blue-600 to-cyan-500 text-white text-center font-semibold rounded-xl"
+                className="mt-2 mx-4 px-5 py-3 bg-gradient-to-r from-emerald-600 to-teal-500 text-white text-center font-semibold rounded-xl"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 Solicită ofertă

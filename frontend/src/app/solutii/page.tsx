@@ -74,16 +74,16 @@ export default function SolutiiPage() {
                 key={solution.title}
                 className={`relative p-8 rounded-2xl ${
                   solution.highlighted
-                    ? "bg-blue-600 text-white shadow-xl shadow-blue-600/25 scale-105"
+                    ? "bg-emerald-600 text-white shadow-xl shadow-emerald-600/25 scale-105"
                     : "bg-white border border-gray-200"
                 }`}
               >
                 {solution.highlighted && (
-                  <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 bg-cyan-400 text-slate-900 text-sm font-semibold rounded-full">
+                  <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 bg-teal-400 text-slate-900 text-sm font-semibold rounded-full">
                     Recomandat
                   </div>
                 )}
-                <div className={`text-sm font-medium mb-2 ${solution.highlighted ? "text-blue-200" : "text-blue-600"}`}>
+                <div className={`text-sm font-medium mb-2 ${solution.highlighted ? "text-emerald-200" : "text-emerald-600"}`}>
                   {solution.subtitle}
                 </div>
                 <h2 className={`text-2xl font-bold mb-2 ${solution.highlighted ? "text-white" : "text-gray-900"}`}>
@@ -93,17 +93,17 @@ export default function SolutiiPage() {
                   <span className={`text-3xl font-bold ${solution.highlighted ? "text-white" : "text-gray-900"}`}>
                     {solution.price}
                   </span>
-                  <span className={solution.highlighted ? "text-blue-200" : "text-gray-500"}>
+                  <span className={solution.highlighted ? "text-emerald-200" : "text-gray-500"}>
                     {solution.period}
                   </span>
                 </div>
-                <p className={`mb-6 ${solution.highlighted ? "text-blue-100" : "text-gray-600"}`}>
+                <p className={`mb-6 ${solution.highlighted ? "text-emerald-100" : "text-gray-600"}`}>
                   {solution.description}
                 </p>
                 <ul className="space-y-3 mb-8">
                   {solution.features.map((feature) => (
                     <li key={feature} className="flex items-center gap-3">
-                      <svg className={`w-5 h-5 ${solution.highlighted ? "text-cyan-300" : "text-green-500"}`} fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
+                      <svg className={`w-5 h-5 ${solution.highlighted ? "text-teal-300" : "text-green-500"}`} fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
                       </svg>
                       <span className={solution.highlighted ? "text-white" : "text-gray-700"}>{feature}</span>
@@ -114,8 +114,8 @@ export default function SolutiiPage() {
                   href="/contact"
                   className={`block w-full py-3 text-center font-semibold rounded-xl transition-colors ${
                     solution.highlighted
-                      ? "bg-white text-blue-600 hover:bg-blue-50"
-                      : "bg-blue-600 text-white hover:bg-blue-700"
+                      ? "bg-white text-emerald-600 hover:bg-emerald-50"
+                      : "bg-emerald-600 text-white hover:bg-emerald-700"
                   }`}
                 >
                   Solicită ofertă

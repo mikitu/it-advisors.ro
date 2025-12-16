@@ -70,7 +70,7 @@ export default function ServiciiPage() {
                 className="group p-8 bg-gray-50 rounded-2xl hover:bg-white hover:shadow-xl hover:shadow-gray-200/50 transition-all duration-300 border border-transparent hover:border-gray-100"
               >
                 <div className="text-5xl mb-6">{service.icon}</div>
-                <h2 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors">
+                <h2 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-emerald-600 transition-colors">
                   {service.title}
                 </h2>
                 <p className="text-gray-600 mb-6">{service.description}</p>
@@ -84,7 +84,7 @@ export default function ServiciiPage() {
                     </li>
                   ))}
                 </ul>
-                <div className="mt-6 flex items-center text-blue-600 font-medium opacity-0 group-hover:opacity-100 transition-opacity">
+                <div className="mt-6 flex items-center text-emerald-600 font-medium opacity-0 group-hover:opacity-100 transition-opacity">
                   Detalii serviciu
                   <svg className="w-4 h-4 ml-2 transform group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
@@ -97,17 +97,17 @@ export default function ServiciiPage() {
       </section>
 
       {/* CTA */}
-      <section className="py-16 bg-blue-600">
+      <section className="py-16 bg-emerald-600">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-2xl sm:text-3xl font-bold text-white mb-4">
             Nu ești sigur ce serviciu ai nevoie?
           </h2>
-          <p className="text-blue-100 mb-8 max-w-xl mx-auto">
+          <p className="text-emerald-100 mb-8 max-w-xl mx-auto">
             Contactează-ne pentru o consultanță gratuită și îți vom recomanda soluția potrivită pentru afacerea ta.
           </p>
           <Link
             href="/contact"
-            className="inline-flex px-8 py-4 bg-white text-blue-600 font-semibold rounded-xl hover:bg-blue-50 transition-colors"
+            className="inline-flex px-8 py-4 bg-white text-emerald-600 font-semibold rounded-xl hover:bg-emerald-50 transition-colors"
           >
             Solicită consultanță gratuită
           </Link>

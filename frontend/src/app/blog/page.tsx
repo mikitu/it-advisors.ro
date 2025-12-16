@@ -77,7 +77,7 @@ export default function BlogPage() {
                 key={category}
                 className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
                   category === "Toate"
-                    ? "bg-blue-600 text-white"
+                    ? "bg-emerald-600 text-white"
                     : "bg-gray-100 text-gray-600 hover:bg-gray-200"
                 }`}
               >
@@ -93,23 +93,23 @@ export default function BlogPage() {
                 key={post.slug}
                 className="group bg-gray-50 rounded-2xl overflow-hidden hover:shadow-xl hover:shadow-gray-200/50 transition-all duration-300"
               >
-                <div className="aspect-video bg-gradient-to-br from-blue-500 to-cyan-400 flex items-center justify-center">
+                <div className="aspect-video bg-gradient-to-br from-emerald-500 to-teal-400 flex items-center justify-center">
                   <span className="text-6xl opacity-50">📝</span>
                 </div>
                 <div className="p-6">
                   <div className="flex items-center gap-3 mb-3">
-                    <span className="px-3 py-1 bg-blue-100 text-blue-700 text-xs font-medium rounded-full">
+                    <span className="px-3 py-1 bg-emerald-100 text-emerald-700 text-xs font-medium rounded-full">
                       {post.category}
                     </span>
                     <span className="text-sm text-gray-500">{post.readTime} citire</span>
                   </div>
-                  <h2 className="text-lg font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">
+                  <h2 className="text-lg font-bold text-gray-900 mb-2 group-hover:text-emerald-600 transition-colors">
                     {post.title}
                   </h2>
                   <p className="text-gray-600 text-sm mb-4 line-clamp-2">{post.excerpt}</p>
                   <div className="flex items-center justify-between">
                     <span className="text-sm text-gray-500">{post.date}</span>
-                    <span className="text-blue-600 text-sm font-medium group-hover:underline">
+                    <span className="text-emerald-600 text-sm font-medium group-hover:underline">
                       Citește →
                     </span>
                   </div>
@@ -130,11 +130,11 @@ export default function BlogPage() {
               <input
                 type="email"
                 placeholder="Adresa ta de email"
-                className="flex-1 px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder:text-gray-500 focus:outline-none focus:border-blue-500"
+                className="flex-1 px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder:text-gray-500 focus:outline-none focus:border-emerald-500"
               />
               <button
                 type="submit"
-                className="px-6 py-3 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 transition-colors"
+                className="px-6 py-3 bg-emerald-600 text-white font-semibold rounded-xl hover:bg-emerald-700 transition-colors"
               >
                 Abonează-te
               </button>

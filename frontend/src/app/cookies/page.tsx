@@ -83,14 +83,14 @@ export default function CookiesPage() {
               Pentru a modifica setările cookie-urilor în browser, accesați:
             </p>
             <ul>
-              <li><a href="https://support.google.com/chrome/answer/95647" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Google Chrome</a></li>
-              <li><a href="https://support.mozilla.org/ro/kb/cookies-informatii-site-uri-stocate-calculator" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Mozilla Firefox</a></li>
-              <li><a href="https://support.apple.com/ro-ro/guide/safari/sfri11471/mac" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Safari</a></li>
-              <li><a href="https://support.microsoft.com/ro-ro/microsoft-edge/ștergerea-modulelor-cookie-în-microsoft-edge-63947406-40ac-c3b8-57b9-2a946a29ae09" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Microsoft Edge</a></li>
+              <li><a href="https://support.google.com/chrome/answer/95647" target="_blank" rel="noopener noreferrer" className="text-emerald-600 hover:underline">Google Chrome</a></li>
+              <li><a href="https://support.mozilla.org/ro/kb/cookies-informatii-site-uri-stocate-calculator" target="_blank" rel="noopener noreferrer" className="text-emerald-600 hover:underline">Mozilla Firefox</a></li>
+              <li><a href="https://support.apple.com/ro-ro/guide/safari/sfri11471/mac" target="_blank" rel="noopener noreferrer" className="text-emerald-600 hover:underline">Safari</a></li>
+              <li><a href="https://support.microsoft.com/ro-ro/microsoft-edge/ștergerea-modulelor-cookie-în-microsoft-edge-63947406-40ac-c3b8-57b9-2a946a29ae09" target="_blank" rel="noopener noreferrer" className="text-emerald-600 hover:underline">Microsoft Edge</a></li>
             </ul>
 
-            <div className="bg-blue-50 border border-blue-200 p-6 rounded-xl not-prose mt-8">
-              <p className="text-blue-800">
+            <div className="bg-emerald-50 border border-emerald-200 p-6 rounded-xl not-prose mt-8">
+              <p className="text-emerald-800">
                 <strong>Notă:</strong> Acest site folosește cookie-uri doar pentru funcționalitatea site-ului, 
                 nu pentru tracking sau beacon. Respectăm confidențialitatea dumneavoastră.
               </p>
@@ -99,7 +99,7 @@ export default function CookiesPage() {
             <h2>Contact</h2>
             <p>
               Pentru întrebări despre politica de cookies, ne puteți contacta la: 
-              <a href="mailto:contact@it-advisors.ro" className="text-blue-600 hover:underline">contact@it-advisors.ro</a>
+              <a href="mailto:contact@it-advisors.ro" className="text-emerald-600 hover:underline">contact@it-advisors.ro</a>
             </p>
 
             <p className="text-sm text-gray-500 mt-8">
