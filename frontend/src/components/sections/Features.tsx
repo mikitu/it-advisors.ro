@@ -36,7 +36,7 @@ export default function Features() {
     <section className="py-24 bg-gradient-to-b from-gray-50 to-white">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <span className="text-emerald-600 font-semibold text-sm uppercase tracking-wider">Avantaje</span>
+          <span className="text-[#2e6932] font-semibold text-sm uppercase tracking-wider">Avantaje</span>
           <h2 className="mt-3 text-3xl sm:text-4xl font-bold text-gray-900">
             De ce să alegeți IT Advisors?
           </h2>
@@ -48,17 +48,17 @@ export default function Features() {
               key={feature.title}
               className={`relative p-8 lg:p-10 rounded-3xl ${
                 index === 0
-                  ? "bg-gradient-to-br from-emerald-600 to-teal-500 text-white"
+                  ? "bg-gradient-to-br from-[#2e6932] to-[#28504a] text-white"
                   : "bg-white border border-gray-200 shadow-lg"
               }`}
             >
-              <div className={`mb-6 ${index === 0 ? "text-white/90" : "text-emerald-600"}`}>
+              <div className={`mb-6 ${index === 0 ? "text-white/90" : "text-[#2e6932]"}`}>
                 {feature.icon}
               </div>
               <h3 className={`text-2xl font-bold mb-3 ${index === 0 ? "text-white" : "text-gray-900"}`}>
                 {feature.title}
               </h3>
-              <p className={`mb-6 ${index === 0 ? "text-emerald-100" : "text-gray-600"}`}>
+              <p className={`mb-6 ${index === 0 ? "text-white/80" : "text-gray-600"}`}>
                 {feature.description}
               </p>
               <ul className="space-y-4">
@@ -66,7 +66,7 @@ export default function Features() {
                   <li key={item} className="flex items-start gap-3">
                     <svg
                       className={`w-6 h-6 flex-shrink-0 mt-0.5 ${
-                        index === 0 ? "text-teal-300" : "text-green-500"
+                        index === 0 ? "text-[#4a9c50]" : "text-[#2e6932]"
                       }`}
                       fill="none"
                       viewBox="0 0 24 24"

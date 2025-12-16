@@ -101,7 +101,7 @@ export default function TermeniPage() {
               <p className="font-semibold text-gray-900">CAM Advisors Project SRL</p>
               <p className="text-gray-600 mt-2">Str. Prevederii 9, Bloc PM20, Scara 1, Etaj 9, Ap. 56</p>
               <p className="text-gray-600">Sector 3, București, 032292, România</p>
-              <p className="text-gray-600 mt-2">Email: <a href="mailto:contact@it-advisors.ro" className="text-emerald-600 hover:underline">contact@it-advisors.ro</a></p>
+              <p className="text-gray-600 mt-2">Email: <a href="mailto:contact@it-advisors.ro" className="text-[#2e6932] hover:underline">contact@it-advisors.ro</a></p>
             </div>
 
             <p className="text-sm text-gray-500 mt-8">

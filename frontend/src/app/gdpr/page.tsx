@@ -89,7 +89,7 @@ export default function GDPRPage() {
               <p className="font-semibold text-gray-900">Autoritatea Națională de Supraveghere a Prelucrării Datelor cu Caracter Personal</p>
               <p className="text-gray-600 mt-2">Bld. General Gheorghe Magheru 28-30, 010336, București, România</p>
               <p className="text-gray-600">Telefon: +40 318 059 211</p>
-              <p className="text-gray-600">Website: <a href="http://www.dataprotection.ro" className="text-emerald-600 hover:underline" target="_blank" rel="noopener noreferrer">www.dataprotection.ro</a></p>
+              <p className="text-gray-600">Website: <a href="http://www.dataprotection.ro" className="text-[#2e6932] hover:underline" target="_blank" rel="noopener noreferrer">www.dataprotection.ro</a></p>
             </div>
 
             <h2>Cum sunt stocate datele dumneavoastră?</h2>
@@ -102,7 +102,7 @@ export default function GDPRPage() {
             <h2>Contact pentru protecția datelor</h2>
             <p>
               Puteți modifica datele furnizate sau adresa întrebări referitoare la datele cu caracter personal 
-              la adresa de email: <a href="mailto:protectiedate@it-advisors.ro" className="text-emerald-600 hover:underline">protectiedate@it-advisors.ro</a>
+              la adresa de email: <a href="mailto:protectiedate@it-advisors.ro" className="text-[#2e6932] hover:underline">protectiedate@it-advisors.ro</a>
             </p>
 
             <div className="bg-gray-50 p-6 rounded-xl not-prose mt-8">

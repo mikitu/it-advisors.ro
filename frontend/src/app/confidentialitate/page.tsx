@@ -61,7 +61,7 @@ export default function ConfidentialitatePage() {
             <p>
               Conform GDPR, aveți dreptul la: acces, rectificare, ștergere, restricționare, 
               portabilitate și obiecție cu privire la datele personale. 
-              Pentru detalii complete, consultați <a href="/gdpr" className="text-emerald-600 hover:underline">pagina GDPR</a>.
+              Pentru detalii complete, consultați <a href="/gdpr" className="text-[#2e6932] hover:underline">pagina GDPR</a>.
             </p>
 
             <h2>Contact</h2>
@@ -70,8 +70,8 @@ export default function ConfidentialitatePage() {
               ne puteți contacta la:
             </p>
             <div className="bg-gray-50 p-6 rounded-xl not-prose">
-              <p className="text-gray-600">Email: <a href="mailto:protectiedate@it-advisors.ro" className="text-emerald-600 hover:underline">protectiedate@it-advisors.ro</a></p>
-              <p className="text-gray-600">Telefon: <a href="tel:+40728691520" className="text-emerald-600 hover:underline">+40 (728) 691 520</a></p>
+              <p className="text-gray-600">Email: <a href="mailto:protectiedate@it-advisors.ro" className="text-[#2e6932] hover:underline">protectiedate@it-advisors.ro</a></p>
+              <p className="text-gray-600">Telefon: <a href="tel:+40728691520" className="text-[#2e6932] hover:underline">+40 (728) 691 520</a></p>
               <p className="text-gray-600 mt-2">Str. Prevederii 9, Bloc PM20, Sector 3, București, 032292</p>
             </div>
 

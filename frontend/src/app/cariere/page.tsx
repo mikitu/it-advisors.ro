@@ -28,7 +28,7 @@ export default function CarierePage() {
             </p>
             <a
               href="mailto:cariere@it-advisors.ro"
-              className="inline-flex px-8 py-4 bg-emerald-600 text-white font-semibold rounded-xl hover:bg-emerald-700 transition-colors"
+              className="inline-flex px-8 py-4 bg-[#2e6932] text-white font-semibold rounded-xl hover:bg-[#3d8a42] transition-colors"
             >
               Trimite CV-ul tău
             </a>
@@ -65,7 +65,7 @@ export default function CarierePage() {
       <section className="py-16 bg-slate-900">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
           <p className="text-gray-400 mb-4">Ai întrebări despre carierele la IT Advisors?</p>
-          <a href="mailto:cariere@it-advisors.ro" className="text-emerald-400 hover:text-emerald-300 font-medium">
+          <a href="mailto:cariere@it-advisors.ro" className="text-[#3d8a42] hover:text-[#4a9c50] font-medium">
             cariere@it-advisors.ro
           </a>
         </div>
