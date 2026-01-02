@@ -1,42 +1,20 @@
 import Link from "next/link";
 import PageHeader from "@/components/ui/PageHeader";
-
-const products = [
-  {
-    category: "Hardware",
-    items: [
-      { name: "Servere Dell PowerEdge", description: "Servere enterprise pentru orice nevoie", image: "🖥️" },
-      { name: "Stații de lucru HP", description: "Calculatoare și laptopuri business", image: "💻" },
-      { name: "Echipamente rețea Cisco", description: "Switch-uri, routere, access points", image: "📡" },
-      { name: "Sisteme de stocare", description: "NAS, SAN și soluții backup", image: "💾" },
-    ],
-  },
-  {
-    category: "Software",
-    items: [
-      { name: "Microsoft 365", description: "Suite completă de productivitate", image: "📊" },
-      { name: "Windows Server", description: "Sisteme de operare server", image: "🪟" },
-      { name: "Sophos Endpoint", description: "Protecție antivirus enterprise", image: "🛡️" },
-      { name: "VMware vSphere", description: "Platformă de virtualizare", image: "☁️" },
-    ],
-  },
-  {
-    category: "Servicii Cloud",
-    items: [
-      { name: "Microsoft Azure", description: "Infrastructură cloud scalabilă", image: "⚡" },
-      { name: "Backup Cloud", description: "Backup automat în cloud", image: "📦" },
-      { name: "Email Hosting", description: "Găzduire email profesională", image: "📧" },
-      { name: "Web Hosting", description: "Găzduire site-uri web", image: "🌐" },
-    ],
-  },
-];
+import { getProductCategories, type ProductCategory } from "@/lib/strapi";
 
 export const metadata = {
   title: "Produse IT | IT Advisors",
   description: "Hardware, software și servicii cloud de la parteneri de încredere. Consultanță gratuită pentru alegerea produselor potrivite.",
 };
 
-export default function ProdusePage() {
+export default async function ProdusePage() {
+  let products: ProductCategory[] = [];
+
+  try {
+    products = await getProductCategories();
+  } catch (error) {
+    console.error("Failed to fetch products from Strapi:", error);
+  }
   return (
     <>
       <PageHeader
@@ -48,18 +26,18 @@ export default function ProdusePage() {
       <section className="py-20 bg-white">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           {products.map((category) => (
-            <div key={category.category} className="mb-16 last:mb-0">
+            <div key={category.name} className="mb-16 last:mb-0">
               <h2 className="text-2xl font-bold text-gray-900 mb-8 flex items-center gap-3">
                 <span className="w-12 h-1 bg-[#2e6932] rounded-full" />
-                {category.category}
+                {category.name}
               </h2>
               <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                {category.items.map((item) => (
+                {category.products?.map((item) => (
                   <div
                     key={item.name}
                     className="p-6 bg-gray-50 rounded-xl hover:bg-white hover:shadow-lg hover:shadow-gray-200/50 transition-all duration-300 border border-transparent hover:border-gray-100"
                   >
-                    <div className="text-4xl mb-4">{item.image}</div>
+                    <div className="text-4xl mb-4">{item.icon}</div>
                     <h3 className="font-semibold text-gray-900 mb-2">{item.name}</h3>
                     <p className="text-sm text-gray-600">{item.description}</p>
                   </div>

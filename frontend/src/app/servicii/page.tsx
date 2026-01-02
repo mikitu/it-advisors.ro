@@ -1,57 +1,21 @@
 import Link from "next/link";
 import PageHeader from "@/components/ui/PageHeader";
-
-const services = [
-  {
-    slug: "administrare-it",
-    icon: "🖥️",
-    title: "Administrare IT",
-    description: "Gestionarea completă a infrastructurii IT: servere, rețele, stații de lucru și periferice.",
-    features: ["Monitorizare 24/7", "Mentenanță preventivă", "Gestionare active IT", "Rapoarte lunare"],
-  },
-  {
-    slug: "suport-tehnic",
-    icon: "🔧",
-    title: "Suport tehnic IT",
-    description: "Asistență tehnică prin telefon, email și remote helpdesk. Intervenții rapide on-site.",
-    features: ["HelpDesk dedicat", "Suport remote", "Intervenții on-site", "SLA garantat"],
-  },
-  {
-    slug: "telefonie-voip",
-    icon: "📞",
-    title: "Telefonie VoIP",
-    description: "Soluții moderne de telefonie IP pentru comunicații eficiente și costuri reduse.",
-    features: ["Centrale virtuale", "Numere virtuale", "Integrare CRM", "Costuri reduse 70%"],
-  },
-  {
-    slug: "web-hosting",
-    icon: "🌐",
-    title: "Web Design & Hosting",
-    description: "Design web modern, găzduire profesională și administrare email.",
-    features: ["Design responsive", "Hosting SSD", "SSL gratuit", "Backup zilnic"],
-  },
-  {
-    slug: "virtualizare",
-    icon: "☁️",
-    title: "Virtualizare",
-    description: "Soluții de virtualizare pentru optimizarea resurselor și reducerea costurilor.",
-    features: ["VMware / Hyper-V", "Cloud privat", "Disaster recovery", "Scalabilitate"],
-  },
-  {
-    slug: "securitate",
-    icon: "🛡️",
-    title: "Securitate IT",
-    description: "Protecție completă împotriva amenințărilor: antivirus, firewall, backup și disaster recovery.",
-    features: ["Firewall enterprise", "Antivirus managed", "Backup cloud", "Audit securitate"],
-  },
-];
+import { getServices, type Service } from "@/lib/strapi";
 
 export const metadata = {
   title: "Servicii IT | IT Advisors",
   description: "Servicii IT complete pentru companii: administrare IT, suport tehnic, telefonie VoIP, web design, virtualizare și securitate IT.",
 };
 
-export default function ServiciiPage() {
+export default async function ServiciiPage() {
+  let services: Service[] = [];
+
+  try {
+    services = await getServices();
+  } catch (error) {
+    console.error("Failed to fetch services from Strapi:", error);
+    // Fallback to empty array - could add static fallback here
+  }
   return (
     <>
       <PageHeader

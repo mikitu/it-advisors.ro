@@ -1,63 +1,20 @@
 import Link from "next/link";
 import PageHeader from "@/components/ui/PageHeader";
-
-const solutions = [
-  {
-    title: "Pachet START",
-    subtitle: "Pentru afaceri mici",
-    price: "de la 300",
-    period: "€/lună",
-    description: "Ideal pentru companiile cu până la 10 angajați care au nevoie de suport IT de bază.",
-    features: [
-      "Suport tehnic remote",
-      "Monitorizare infrastructură",
-      "Backup date (50GB)",
-      "Antivirus managed",
-      "Răspuns în 8 ore",
-    ],
-    highlighted: false,
-  },
-  {
-    title: "Pachet BUSINESS",
-    subtitle: "Cel mai popular",
-    price: "de la 600",
-    period: "€/lună",
-    description: "Soluția completă pentru companii în creștere cu 10-50 angajați.",
-    features: [
-      "Tot ce include START",
-      "Administrare completă IT",
-      "Backup date (200GB)",
-      "Telefonie VoIP",
-      "Răspuns în 4 ore",
-      "Vizite lunare on-site",
-    ],
-    highlighted: true,
-  },
-  {
-    title: "Pachet ENTERPRISE",
-    subtitle: "Pentru companii mari",
-    price: "Personalizat",
-    period: "",
-    description: "Soluții personalizate pentru companii cu nevoi complexe și cerințe speciale.",
-    features: [
-      "Tot ce include BUSINESS",
-      "Manager IT dedicat",
-      "SLA personalizat",
-      "Infrastructură cloud",
-      "Securitate avansată",
-      "Răspuns în 1 oră",
-      "Suport 24/7",
-    ],
-    highlighted: false,
-  },
-];
+import { getSolutions, type Solution } from "@/lib/strapi";
 
 export const metadata = {
   title: "Soluții IT | IT Advisors",
   description: "Pachete de servicii IT adaptate nevoilor companiei tale. De la startup la enterprise, avem soluția potrivită.",
 };
 
-export default function SolutiiPage() {
+export default async function SolutiiPage() {
+  let solutions: Solution[] = [];
+
+  try {
+    solutions = await getSolutions();
+  } catch (error) {
+    console.error("Failed to fetch solutions from Strapi:", error);
+  }
   return (
     <>
       <PageHeader
