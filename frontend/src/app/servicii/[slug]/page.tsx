@@ -13,9 +13,19 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
   const service = await getServiceBySlug(slug);
   if (!service) notFound();
 
+  const breadcrumbs = [
+    { label: "Servicii", href: "/servicii" },
+    { label: service.title },
+  ];
+
   return (
     <>
-      <PageHeader badge={service.icon + " Serviciu"} title={service.title} description={service.description} />
+      <PageHeader
+        badge={service.icon + " Serviciu"}
+        title={service.title}
+        description={service.description}
+        breadcrumbs={breadcrumbs}
+      />
 
       <section className="py-20 bg-white">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
