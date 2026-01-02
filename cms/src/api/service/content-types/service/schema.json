@@ -38,6 +38,37 @@
     "order": {
       "type": "integer",
       "default": 0
+    },
+    "heroImage": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": ["images"]
+    },
+    "gallery": {
+      "type": "media",
+      "multiple": true,
+      "allowedTypes": ["images"]
+    },
+    "benefits": {
+      "type": "json"
+    },
+    "process": {
+      "type": "json"
+    },
+    "stats": {
+      "type": "json"
+    },
+    "testimonials": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::testimonial.testimonial",
+      "mappedBy": "service"
+    },
+    "showcases": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::showcase.showcase",
+      "mappedBy": "service"
     }
   }
 }

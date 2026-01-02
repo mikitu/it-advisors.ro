@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
+import CountUp, { AnimatedStat } from "@/components/ui/CountUp";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 30 },
@@ -141,15 +142,15 @@ export default function Hero() {
               custom={0.5}
             >
               <div className="text-center lg:text-left">
-                <div className="text-3xl font-bold text-white">2010</div>
+                <CountUp value={2010} className="text-3xl font-bold text-white block" />
                 <div className="text-sm text-gray-400">Pe piață din</div>
               </div>
               <div className="text-center lg:text-left">
-                <div className="text-3xl font-bold text-white">200+</div>
+                <CountUp value={200} suffix="+" className="text-3xl font-bold text-white block" />
                 <div className="text-sm text-gray-400">Clienți mulțumiți</div>
               </div>
               <div className="text-center lg:text-left">
-                <div className="text-3xl font-bold text-white">24/7</div>
+                <AnimatedStat className="text-3xl font-bold text-white">24/7</AnimatedStat>
                 <div className="text-sm text-gray-400">Suport tehnic</div>
               </div>
             </motion.div>

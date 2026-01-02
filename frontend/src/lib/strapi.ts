@@ -41,6 +41,41 @@ async function fetchStrapi<T>(
 }
 
 // Types for content
+export interface Testimonial {
+  id: number;
+  documentId: string;
+  clientName: string;
+  clientRole?: string;
+  clientCompany?: string;
+  clientImage?: { url: string };
+  review: string;
+  rating: number;
+  featured: boolean;
+}
+
+export interface Showcase {
+  id: number;
+  documentId: string;
+  title: string;
+  slug: string;
+  clientName: string;
+  clientLogo?: { url: string };
+  coverImage?: { url: string };
+  gallery?: { url: string }[];
+  challenge?: string;
+  solution?: string;
+  results?: string[];
+  stats?: Record<string, string | number>;
+  featured: boolean;
+  completedAt?: string;
+}
+
+export interface ProcessStep {
+  step: number;
+  title: string;
+  desc: string;
+}
+
 export interface Service {
   id: number;
   documentId: string;
@@ -51,6 +86,13 @@ export interface Service {
   features: string[];
   fullDescription?: string;
   order: number;
+  heroImage?: { url: string };
+  gallery?: { url: string }[];
+  benefits?: string[];
+  process?: ProcessStep[];
+  stats?: Record<string, string | number>;
+  testimonials?: Testimonial[];
+  showcases?: Showcase[];
 }
 
 export interface Solution {
@@ -114,7 +156,9 @@ export async function getServices(): Promise<Service[]> {
 }
 
 export async function getServiceBySlug(slug: string): Promise<Service | null> {
-  const response = await fetchStrapi<Service[]>(`/services?filters[slug][$eq]=${slug}&populate=*`);
+  const response = await fetchStrapi<Service[]>(
+    `/services?filters[slug][$eq]=${slug}&populate[testimonials][populate]=*&populate[showcases][populate]=*&populate=heroImage,gallery`
+  );
   return response.data?.[0] || null;
 }
 

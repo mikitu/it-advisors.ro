@@ -581,12 +581,15 @@ export interface ApiServiceService extends Struct.CollectionTypeSchema {
     draftAndPublish: true;
   };
   attributes: {
+    benefits: Schema.Attribute.JSON;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
     description: Schema.Attribute.Text & Schema.Attribute.Required;
     features: Schema.Attribute.JSON;
     fullDescription: Schema.Attribute.RichText;
+    gallery: Schema.Attribute.Media<'images', true>;
+    heroImage: Schema.Attribute.Media<'images'>;
     icon: Schema.Attribute.String & Schema.Attribute.Required;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
@@ -595,8 +598,56 @@ export interface ApiServiceService extends Struct.CollectionTypeSchema {
     > &
       Schema.Attribute.Private;
     order: Schema.Attribute.Integer & Schema.Attribute.DefaultTo<0>;
+    process: Schema.Attribute.JSON;
     publishedAt: Schema.Attribute.DateTime;
+    showcases: Schema.Attribute.Relation<'oneToMany', 'api::showcase.showcase'>;
     slug: Schema.Attribute.UID<'title'> & Schema.Attribute.Required;
+    stats: Schema.Attribute.JSON;
+    testimonials: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::testimonial.testimonial'
+    >;
+    title: Schema.Attribute.String & Schema.Attribute.Required;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiShowcaseShowcase extends Struct.CollectionTypeSchema {
+  collectionName: 'showcases';
+  info: {
+    description: 'Proiecte \u0219i studii de caz';
+    displayName: 'Showcase';
+    pluralName: 'showcases';
+    singularName: 'showcase';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    challenge: Schema.Attribute.Text;
+    clientLogo: Schema.Attribute.Media<'images'>;
+    clientName: Schema.Attribute.String & Schema.Attribute.Required;
+    completedAt: Schema.Attribute.Date;
+    coverImage: Schema.Attribute.Media<'images'>;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    featured: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
+    gallery: Schema.Attribute.Media<'images', true>;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::showcase.showcase'
+    > &
+      Schema.Attribute.Private;
+    publishedAt: Schema.Attribute.DateTime;
+    results: Schema.Attribute.JSON;
+    service: Schema.Attribute.Relation<'manyToOne', 'api::service.service'>;
+    slug: Schema.Attribute.UID<'title'> & Schema.Attribute.Required;
+    solution: Schema.Attribute.Text;
+    stats: Schema.Attribute.JSON;
     title: Schema.Attribute.String & Schema.Attribute.Required;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
@@ -634,6 +685,50 @@ export interface ApiSolutionSolution extends Struct.CollectionTypeSchema {
     publishedAt: Schema.Attribute.DateTime;
     subtitle: Schema.Attribute.String;
     title: Schema.Attribute.String & Schema.Attribute.Required;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiTestimonialTestimonial extends Struct.CollectionTypeSchema {
+  collectionName: 'testimonials';
+  info: {
+    description: 'Testimoniale de la clien\u021Bi';
+    displayName: 'Testimonial';
+    pluralName: 'testimonials';
+    singularName: 'testimonial';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    clientCompany: Schema.Attribute.String;
+    clientImage: Schema.Attribute.Media<'images'>;
+    clientName: Schema.Attribute.String & Schema.Attribute.Required;
+    clientRole: Schema.Attribute.String;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    featured: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::testimonial.testimonial'
+    > &
+      Schema.Attribute.Private;
+    publishedAt: Schema.Attribute.DateTime;
+    rating: Schema.Attribute.Integer &
+      Schema.Attribute.SetMinMax<
+        {
+          max: 5;
+          min: 1;
+        },
+        number
+      > &
+      Schema.Attribute.DefaultTo<5>;
+    review: Schema.Attribute.Text & Schema.Attribute.Required;
+    service: Schema.Attribute.Relation<'manyToOne', 'api::service.service'>;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -1155,7 +1250,9 @@ declare module '@strapi/strapi' {
       'api::product-category.product-category': ApiProductCategoryProductCategory;
       'api::product.product': ApiProductProduct;
       'api::service.service': ApiServiceService;
+      'api::showcase.showcase': ApiShowcaseShowcase;
       'api::solution.solution': ApiSolutionSolution;
+      'api::testimonial.testimonial': ApiTestimonialTestimonial;
       'plugin::content-releases.release': PluginContentReleasesRelease;
       'plugin::content-releases.release-action': PluginContentReleasesReleaseAction;
       'plugin::i18n.locale': PluginI18NLocale;
