@@ -120,10 +120,84 @@ export interface Product {
   id: number;
   documentId: string;
   name: string;
+  slug: string;
   description: string;
+  fullDescription?: string;
+  sku?: string;
+  price: number;
+  salePrice?: number;
+  stock: number;
   icon: string;
+  image?: { url: string };
+  gallery?: { url: string }[];
+  featured: boolean;
   order: number;
   category?: ProductCategory;
+}
+
+export type OrderStatus = 'pending' | 'processing' | 'shipped' | 'delivered' | 'cancelled';
+
+export interface OrderItem {
+  id: number;
+  documentId: string;
+  productName: string;
+  productSku?: string;
+  quantity: number;
+  unitPrice: number;
+  totalPrice: number;
+  product?: Product;
+}
+
+export interface Order {
+  id: number;
+  documentId: string;
+  orderNumber: string;
+  status: OrderStatus;
+  customerEmail: string;
+  customerName: string;
+  customerPhone: string;
+  shippingAddress: string;
+  shippingCity: string;
+  shippingCounty: string;
+  shippingPostalCode?: string;
+  billingAddress?: string;
+  billingCity?: string;
+  billingCounty?: string;
+  billingPostalCode?: string;
+  companyName?: string;
+  companyCUI?: string;
+  companyRegCom?: string;
+  subtotal: number;
+  shippingCost: number;
+  total: number;
+  notes?: string;
+  items?: OrderItem[];
+  createdAt: string;
+}
+
+export interface CreateOrderData {
+  customerEmail: string;
+  customerName: string;
+  customerPhone: string;
+  shippingAddress: string;
+  shippingCity: string;
+  shippingCounty: string;
+  shippingPostalCode?: string;
+  billingAddress?: string;
+  billingCity?: string;
+  billingCounty?: string;
+  billingPostalCode?: string;
+  companyName?: string;
+  companyCUI?: string;
+  companyRegCom?: string;
+  notes?: string;
+  items: {
+    productId: number;
+    productName: string;
+    productSku?: string;
+    quantity: number;
+    unitPrice: number;
+  }[];
 }
 
 export interface BlogCategory {
@@ -187,3 +261,105 @@ export async function getBlogCategories(): Promise<BlogCategory[]> {
   return response.data || [];
 }
 
+// Products API
+export async function getProducts(): Promise<Product[]> {
+  const response = await fetchStrapi<Product[]>('/products?sort=order:asc&populate=*');
+  return response.data || [];
+}
+
+export async function getFeaturedProducts(): Promise<Product[]> {
+  const response = await fetchStrapi<Product[]>('/products?filters[featured][$eq]=true&sort=order:asc&populate=*');
+  return response.data || [];
+}
+
+export async function getProductBySlug(slug: string): Promise<Product | null> {
+  const response = await fetchStrapi<Product[]>(`/products?filters[slug][$eq]=${slug}&populate=*`);
+  return response.data?.[0] || null;
+}
+
+export async function getProductsByCategory(categoryId: number): Promise<Product[]> {
+  const response = await fetchStrapi<Product[]>(`/products?filters[category][id][$eq]=${categoryId}&sort=order:asc&populate=*`);
+  return response.data || [];
+}
+
+// Orders API
+export async function createOrder(orderData: CreateOrderData): Promise<Order> {
+  // Generate order number
+  const orderNumber = `ORD-${Date.now()}-${Math.random().toString(36).substr(2, 4).toUpperCase()}`;
+
+  // Calculate totals
+  const subtotal = orderData.items.reduce((sum, item) => sum + (item.unitPrice * item.quantity), 0);
+  const shippingCost = subtotal >= 500 ? 0 : 25; // Free shipping over 500 RON
+  const total = subtotal + shippingCost;
+
+  // First create the order
+  const orderResponse = await fetch(`${STRAPI_URL}/api/orders`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      data: {
+        orderNumber,
+        status: 'pending',
+        customerEmail: orderData.customerEmail,
+        customerName: orderData.customerName,
+        customerPhone: orderData.customerPhone,
+        shippingAddress: orderData.shippingAddress,
+        shippingCity: orderData.shippingCity,
+        shippingCounty: orderData.shippingCounty,
+        shippingPostalCode: orderData.shippingPostalCode,
+        billingAddress: orderData.billingAddress,
+        billingCity: orderData.billingCity,
+        billingCounty: orderData.billingCounty,
+        billingPostalCode: orderData.billingPostalCode,
+        companyName: orderData.companyName,
+        companyCUI: orderData.companyCUI,
+        companyRegCom: orderData.companyRegCom,
+        notes: orderData.notes,
+        subtotal,
+        shippingCost,
+        total,
+      }
+    }),
+  });
+
+  if (!orderResponse.ok) {
+    throw new Error('Failed to create order');
+  }
+
+  const { data: order } = await orderResponse.json();
+
+  // Then create order items
+  for (const item of orderData.items) {
+    await fetch(`${STRAPI_URL}/api/order-items`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        data: {
+          order: order.id,
+          product: item.productId,
+          productName: item.productName,
+          productSku: item.productSku,
+          quantity: item.quantity,
+          unitPrice: item.unitPrice,
+          totalPrice: item.unitPrice * item.quantity,
+        }
+      }),
+    });
+  }
+
+  return order;
+}
+
+export async function getOrdersByEmail(email: string): Promise<Order[]> {
+  const response = await fetchStrapi<Order[]>(
+    `/orders?filters[customerEmail][$eq]=${encodeURIComponent(email)}&sort=createdAt:desc&populate[items][populate]=product`
+  );
+  return response.data || [];
+}
+
+export async function getOrderByNumber(orderNumber: string): Promise<Order | null> {
+  const response = await fetchStrapi<Order[]>(
+    `/orders?filters[orderNumber][$eq]=${orderNumber}&populate[items][populate]=product`
+  );
+  return response.data?.[0] || null;
+}

@@ -4,6 +4,8 @@ import "./globals.css";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import TransitionWrapper from "@/components/layout/TransitionWrapper";
+import { CartProvider } from "@/lib/cart-context";
+import CartDrawer from "@/components/shop/CartDrawer";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -41,11 +43,14 @@ export default function RootLayout({
   return (
     <html lang="ro">
       <body className={`${inter.variable} font-sans antialiased`}>
-        <Header />
-        <main>
-          <TransitionWrapper>{children}</TransitionWrapper>
-        </main>
-        <Footer />
+        <CartProvider>
+          <Header />
+          <main>
+            <TransitionWrapper>{children}</TransitionWrapper>
+          </main>
+          <Footer />
+          <CartDrawer />
+        </CartProvider>
       </body>
     </html>
   );
