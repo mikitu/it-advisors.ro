@@ -26,8 +26,9 @@ export default async function ProdusePage() {
     brands = mockBrands;
   }
 
-  // If no products from Strapi, use mock data
-  if (products.length === 0) {
+  // If no products from Strapi or products have no valid price, use mock data
+  const hasValidProducts = products.length > 0 && products.some(p => p.price && p.price > 0);
+  if (!hasValidProducts) {
     products = mockProducts;
     categories = mockCategories;
     brands = mockBrands;
