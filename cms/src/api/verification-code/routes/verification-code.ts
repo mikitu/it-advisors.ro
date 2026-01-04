@@ -20,6 +20,16 @@ export default {
         middlewares: [],
       },
     },
+    {
+      method: 'GET',
+      path: '/verification-codes/orders',
+      handler: 'verification-code.getOrders',
+      config: {
+        auth: false, // We handle auth via JWT in the controller
+        policies: [],
+        middlewares: [],
+      },
+    },
   ],
 };
 

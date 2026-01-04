@@ -1,6 +1,10 @@
 import { factories } from '@strapi/strapi';
 import crypto from 'crypto';
 import nodemailer from 'nodemailer';
+import jwt from 'jsonwebtoken';
+
+const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
+const TOKEN_EXPIRY = '1h'; // 1 hour
 
 // Create reusable transporter
 const createTransporter = () => {
@@ -13,6 +17,22 @@ const createTransporter = () => {
       pass: process.env.SMTP_PASS,
     },
   });
+};
+
+// Generate access token for verified email
+const generateAccessToken = (email: string): string => {
+  return jwt.sign({ email, type: 'account_access' }, JWT_SECRET, { expiresIn: TOKEN_EXPIRY });
+};
+
+// Verify access token
+const verifyAccessToken = (token: string): { email: string } | null => {
+  try {
+    const decoded = jwt.verify(token, JWT_SECRET) as { email: string; type: string };
+    if (decoded.type !== 'account_access') return null;
+    return { email: decoded.email };
+  } catch {
+    return null;
+  }
 };
 
 export default factories.createCoreController('api::verification-code.verification-code', ({ strapi }) => ({
@@ -89,7 +109,7 @@ export default factories.createCoreController('api::verification-code.verificati
     return ctx.send({ success: true, message: 'Codul a fost trimis pe email.' });
   },
 
-  // Verify code and return orders
+  // Verify code and return access token + orders
   async verifyCode(ctx) {
     const { email, code } = ctx.request.body;
 
@@ -126,6 +146,9 @@ export default factories.createCoreController('api::verification-code.verificati
       },
     });
 
+    // Generate access token
+    const accessToken = generateAccessToken(email);
+
     // Get orders for this email
     const orders = await strapi.documents('api::order.order').findMany({
       filters: { customerEmail: email },
@@ -137,7 +160,36 @@ export default factories.createCoreController('api::verification-code.verificati
       },
     });
 
-    return ctx.send({ success: true, orders });
+    return ctx.send({ success: true, accessToken, orders });
+  },
+
+  // Get orders using access token
+  async getOrders(ctx) {
+    const authHeader = ctx.request.header.authorization;
+
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      return ctx.unauthorized('Token de acces lipsă');
+    }
+
+    const token = authHeader.substring(7);
+    const decoded = verifyAccessToken(token);
+
+    if (!decoded) {
+      return ctx.unauthorized('Token invalid sau expirat');
+    }
+
+    // Get orders for this email
+    const orders = await strapi.documents('api::order.order').findMany({
+      filters: { customerEmail: decoded.email },
+      sort: { createdAt: 'desc' },
+      populate: {
+        items: {
+          populate: ['product'],
+        },
+      },
+    });
+
+    return ctx.send({ success: true, email: decoded.email, orders });
   },
 }));
 

@@ -1,11 +1,12 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
 import PageHeader from "@/components/ui/PageHeader";
-import { EnvelopeIcon, KeyIcon, ArrowPathIcon } from "@heroicons/react/24/outline";
+import { EnvelopeIcon, KeyIcon, ArrowPathIcon, ArrowRightOnRectangleIcon } from "@heroicons/react/24/outline";
 
 const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL || "http://localhost:1337";
+const TOKEN_KEY = "account_access_token";
 
 interface OrderItem {
   id: number;
@@ -46,17 +47,60 @@ const statusLabels: Record<string, { label: string; color: string }> = {
   cancelled: { label: "Anulată", color: "bg-red-100 text-red-800" },
 };
 
-type Step = "email" | "code" | "orders";
+type Step = "loading" | "email" | "code" | "orders";
 
 export default function AccountPage() {
-  const [step, setStep] = useState<Step>("email");
+  const [step, setStep] = useState<Step>("loading");
   const [email, setEmail] = useState("");
   const [code, setCode] = useState("");
   const [orders, setOrders] = useState<Order[]>([]);
+  const [userEmail, setUserEmail] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const { executeRecaptcha } = useGoogleReCaptcha();
+
+  // Check for existing token on mount
+  useEffect(() => {
+    const checkToken = async () => {
+      const token = localStorage.getItem(TOKEN_KEY);
+      if (!token) {
+        setStep("email");
+        return;
+      }
+
+      try {
+        const response = await fetch(`${STRAPI_URL}/api/verification-codes/orders`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          setOrders(data.orders || []);
+          setUserEmail(data.email);
+          setStep("orders");
+        } else {
+          // Token invalid or expired
+          localStorage.removeItem(TOKEN_KEY);
+          setStep("email");
+        }
+      } catch {
+        localStorage.removeItem(TOKEN_KEY);
+        setStep("email");
+      }
+    };
+
+    checkToken();
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem(TOKEN_KEY);
+    setOrders([]);
+    setUserEmail(null);
+    setEmail("");
+    setCode("");
+    setStep("email");
+  };
 
   const handleSendCode = useCallback(async (e: React.FormEvent) => {
     e.preventDefault();
@@ -123,7 +167,12 @@ export default function AccountPage() {
       const data = await response.json();
 
       if (response.ok && data.success) {
+        // Store token in localStorage
+        if (data.accessToken) {
+          localStorage.setItem(TOKEN_KEY, data.accessToken);
+        }
         setOrders(data.orders || []);
+        setUserEmail(email);
         setStep("orders");
         setSuccessMessage(null);
       } else {
@@ -141,7 +190,6 @@ export default function AccountPage() {
     setStep("email");
     setEmail("");
     setCode("");
-    setOrders([]);
     setError(null);
     setSuccessMessage(null);
   };
@@ -152,6 +200,14 @@ export default function AccountPage() {
 
       <section className="py-12 bg-gray-50 min-h-[60vh]">
         <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
+
+          {/* Loading state */}
+          {step === "loading" && (
+            <div className="bg-white rounded-2xl p-8 shadow-sm text-center">
+              <div className="animate-spin w-8 h-8 border-4 border-[#2e6932] border-t-transparent rounded-full mx-auto mb-4"></div>
+              <p className="text-gray-600">Se verifică sesiunea...</p>
+            </div>
+          )}
 
           {/* Step 1: Email input */}
           {step === "email" && (
@@ -250,15 +306,15 @@ export default function AccountPage() {
             <>
               <div className="flex items-center justify-between mb-6">
                 <div>
-                  <h2 className="text-lg font-semibold">Comenzile pentru {email}</h2>
+                  <h2 className="text-lg font-semibold">Comenzile pentru {userEmail || email}</h2>
                   <p className="text-sm text-gray-500">{orders.length} comenzi găsite</p>
                 </div>
                 <button
-                  onClick={handleReset}
-                  className="px-4 py-2 text-sm text-gray-600 hover:text-gray-800 border rounded-lg flex items-center gap-2"
+                  onClick={handleLogout}
+                  className="px-4 py-2 text-sm text-red-600 hover:text-red-800 border border-red-200 hover:border-red-300 rounded-lg flex items-center gap-2 transition-colors"
                 >
-                  <ArrowPathIcon className="w-4 h-4" />
-                  Altă căutare
+                  <ArrowRightOnRectangleIcon className="w-4 h-4" />
+                  Deconectare
                 </button>
               </div>
 
