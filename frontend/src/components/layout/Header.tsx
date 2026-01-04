@@ -61,9 +61,9 @@ export default function Header() {
             ))}
             {/* Account link */}
             <Link
-              href="/cont"
+              href="/account"
               className={`ml-2 p-2 rounded-lg transition-colors ${
-                isActive("/cont")
+                isActive("/account")
                   ? "text-[#2e6932] bg-[#2e6932]/10"
                   : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"
               }`}
@@ -126,9 +126,9 @@ export default function Header() {
                 </Link>
               ))}
               <Link
-                href="/cont"
+                href="/account"
                 className={`px-4 py-3 text-base font-medium rounded-lg flex items-center gap-2 ${
-                  isActive("/cont")
+                  isActive("/account")
                     ? "text-[#2e6932] bg-[#2e6932]/10"
                     : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"
                 }`}
