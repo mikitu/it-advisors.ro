@@ -330,15 +330,14 @@ export async function createOrder(orderData: CreateOrderData): Promise<Order> {
 
   const { data: order } = await orderResponse.json();
 
-  // Then create order items
+  // Then create order items using documentId for relations (Strapi v5)
   for (const item of orderData.items) {
-    await fetch(`${STRAPI_URL}/api/order-items`, {
+    const orderItemResponse = await fetch(`${STRAPI_URL}/api/order-items`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         data: {
-          order: order.id,
-          product: item.productId,
+          order: order.documentId,  // Use documentId for relations in Strapi v5
           productName: item.productName,
           productSku: item.productSku,
           quantity: item.quantity,
@@ -347,6 +346,10 @@ export async function createOrder(orderData: CreateOrderData): Promise<Order> {
         }
       }),
     });
+
+    if (!orderItemResponse.ok) {
+      console.error('Failed to create order item:', await orderItemResponse.text());
+    }
   }
 
   return order;
