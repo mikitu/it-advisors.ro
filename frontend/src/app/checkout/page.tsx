@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import ReCAPTCHA from "react-google-recaptcha";
 import { useCart } from "@/lib/cart-context";
 import { createOrder } from "@/lib/strapi";
 import PageHeader from "@/components/ui/PageHeader";
@@ -18,6 +19,7 @@ export default function CheckoutPage() {
   const [error, setError] = useState<string | null>(null);
   const [isCompany, setIsCompany] = useState(false);
   const [sameAddress, setSameAddress] = useState(true);
+  const recaptchaRef = useRef<ReCAPTCHA>(null);
 
   const [formData, setFormData] = useState({
     customerName: "", customerEmail: "", customerPhone: "",
@@ -37,6 +39,26 @@ export default function CheckoutPage() {
     setError(null);
 
     try {
+      // Verify reCAPTCHA
+      const captchaToken = recaptchaRef.current?.getValue();
+      if (!captchaToken) {
+        setError("Te rugăm să completezi verificarea captcha.");
+        setIsSubmitting(false);
+        return;
+      }
+
+      const captchaResponse = await fetch("/api/verify-captcha", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ token: captchaToken }),
+      });
+
+      if (!captchaResponse.ok) {
+        setError("Verificarea captcha a eșuat. Te rugăm să încerci din nou.");
+        recaptchaRef.current?.reset();
+        setIsSubmitting(false);
+        return;
+      }
       const orderItems = items.map((item) => ({
         productId: item.product.id,
         productName: item.product.name,
@@ -155,7 +177,14 @@ export default function CheckoutPage() {
                   <div className="flex justify-between text-lg font-bold pt-2 border-t"><span>Total</span><span>{formatPrice(total)}</span></div>
                 </div>
                 {error && <p className="mt-4 text-red-600 text-sm">{error}</p>}
-                <button type="submit" disabled={isSubmitting} className="mt-6 w-full py-4 bg-[#2e6932] text-white font-semibold rounded-xl hover:bg-[#245228] transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                <div className="mt-4 flex justify-center">
+                  <ReCAPTCHA
+                    ref={recaptchaRef}
+                    sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY || ""}
+                    hl="ro"
+                  />
+                </div>
+                <button type="submit" disabled={isSubmitting} className="mt-4 w-full py-4 bg-[#2e6932] text-white font-semibold rounded-xl hover:bg-[#245228] transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
                   {isSubmitting ? "Se procesează..." : "Plasează comanda"}
                 </button>
                 <p className="mt-4 text-xs text-gray-500 text-center">Plata se face la livrare (ramburs) sau prin transfer bancar.</p>
