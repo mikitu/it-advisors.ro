@@ -43,6 +43,13 @@
       "type": "integer",
       "default": 0
     },
+    "brand": {
+      "type": "string"
+    },
+    "popularity": {
+      "type": "integer",
+      "default": 0
+    },
     "icon": {
       "type": "string"
     },

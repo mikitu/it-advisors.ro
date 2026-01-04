@@ -127,6 +127,8 @@ export interface Product {
   price: number;
   salePrice?: number;
   stock: number;
+  brand?: string;
+  popularity?: number;
   icon: string;
   image?: { url: string };
   gallery?: { url: string }[];

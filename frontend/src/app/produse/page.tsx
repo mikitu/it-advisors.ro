@@ -1,8 +1,8 @@
 import Link from "next/link";
 import PageHeader from "@/components/ui/PageHeader";
-import ProductGrid from "@/components/shop/ProductGrid";
+import ProductsSection from "@/components/shop/ProductsSection";
 import { getProducts, getProductCategories, type Product, type ProductCategory } from "@/lib/strapi";
-import { mockProducts } from "@/lib/mock-products";
+import { mockProducts, mockBrands, mockCategories } from "@/lib/mock-products";
 
 export const metadata = {
   title: "Produse IT | IT Advisors",
@@ -12,18 +12,25 @@ export const metadata = {
 export default async function ProdusePage() {
   let products: Product[] = [];
   let categories: ProductCategory[] = [];
+  let brands: string[] = [];
 
   try {
     products = await getProducts();
     categories = await getProductCategories();
+    // Extract unique brands from products
+    brands = [...new Set(products.map(p => p.brand).filter(Boolean))] as string[];
   } catch (error) {
     console.error("Failed to fetch products from Strapi:", error);
     products = mockProducts;
+    categories = mockCategories;
+    brands = mockBrands;
   }
 
   // If no products from Strapi, use mock data
   if (products.length === 0) {
     products = mockProducts;
+    categories = mockCategories;
+    brands = mockBrands;
   }
 
   return (
@@ -34,22 +41,14 @@ export default async function ProdusePage() {
         description="Cumpără online hardware, software și licențe. Livrare rapidă în toată țara."
       />
 
-      {/* Products Grid */}
+      {/* Products Grid with Filters */}
       <section className="py-20 bg-white">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          {/* Filters - simplified for now */}
-          <div className="flex flex-wrap gap-3 mb-12">
-            <button className="px-4 py-2 bg-[#2e6932] text-white rounded-lg text-sm font-medium">
-              Toate
-            </button>
-            {categories.map((cat) => (
-              <button key={cat.id} className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-200 transition-colors">
-                {cat.name}
-              </button>
-            ))}
-          </div>
-
-          <ProductGrid products={products} />
+          <ProductsSection
+            products={products}
+            categories={categories}
+            brands={brands}
+          />
         </div>
       </section>
 
