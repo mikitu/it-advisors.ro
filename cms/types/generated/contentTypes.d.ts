@@ -585,7 +585,14 @@ export interface ApiOrderOrder extends Struct.CollectionTypeSchema {
     shippingCounty: Schema.Attribute.String & Schema.Attribute.Required;
     shippingPostalCode: Schema.Attribute.String;
     status: Schema.Attribute.Enumeration<
-      ['pending', 'processing', 'shipped', 'delivered', 'cancelled']
+      [
+        'pending',
+        'confirmed',
+        'processing',
+        'shipped',
+        'delivered',
+        'cancelled',
+      ]
     > &
       Schema.Attribute.Required &
       Schema.Attribute.DefaultTo<'pending'>;
