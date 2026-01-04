@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useRef } from "react";
-import ReCAPTCHA from "react-google-recaptcha";
+import { useState, useCallback } from "react";
+import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
 import PageHeader from "@/components/ui/PageHeader";
 
 export default function ContactPage() {
@@ -15,21 +15,20 @@ export default function ContactPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<"idle" | "success" | "error">("idle");
   const [error, setError] = useState<string | null>(null);
-  const recaptchaRef = useRef<ReCAPTCHA>(null);
+  const { executeRecaptcha } = useGoogleReCaptcha();
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = useCallback(async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!executeRecaptcha) {
+      setError("reCAPTCHA nu este încărcat. Reîncarcă pagina.");
+      return;
+    }
     setIsSubmitting(true);
     setError(null);
 
     try {
-      // Verify reCAPTCHA
-      const captchaToken = recaptchaRef.current?.getValue();
-      if (!captchaToken) {
-        setError("Te rugăm să completezi verificarea captcha.");
-        setIsSubmitting(false);
-        return;
-      }
+      // Get reCAPTCHA token
+      const captchaToken = await executeRecaptcha("contact");
 
       const captchaResponse = await fetch("/api/verify-captcha", {
         method: "POST",
@@ -39,7 +38,6 @@ export default function ContactPage() {
 
       if (!captchaResponse.ok) {
         setError("Verificarea captcha a eșuat. Te rugăm să încerci din nou.");
-        recaptchaRef.current?.reset();
         setIsSubmitting(false);
         return;
       }
@@ -50,14 +48,13 @@ export default function ContactPage() {
 
       setSubmitStatus("success");
       setFormData({ name: "", email: "", phone: "", company: "", message: "" });
-      recaptchaRef.current?.reset();
     } catch {
       setError("A apărut o eroare. Te rugăm să încerci din nou.");
       setSubmitStatus("error");
     } finally {
       setIsSubmitting(false);
     }
-  };
+  }, [executeRecaptcha]);
 
   return (
     <>
@@ -129,15 +126,6 @@ export default function ContactPage() {
                     onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                     className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#2e6932] focus:ring-2 focus:ring-[#2e6932]/20 outline-none transition-all resize-none"
                     placeholder="Descrie-ne cum te putem ajuta..."
-                  />
-                </div>
-
-                {/* reCAPTCHA */}
-                <div className="flex justify-start">
-                  <ReCAPTCHA
-                    ref={recaptchaRef}
-                    sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY || ""}
-                    hl="ro"
                   />
                 </div>
 

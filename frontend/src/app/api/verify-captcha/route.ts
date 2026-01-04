@@ -33,7 +33,20 @@ export async function POST(request: NextRequest) {
     const data = await response.json();
 
     if (data.success) {
-      return NextResponse.json({ success: true });
+      // For reCAPTCHA v3, check the score (0.0 - 1.0, higher is more likely human)
+      // Score threshold of 0.5 is recommended by Google
+      const score = data.score ?? 1.0; // v2 doesn't have score, default to 1.0
+      const threshold = parseFloat(process.env.RECAPTCHA_SCORE_THRESHOLD || "0.5");
+
+      if (score < threshold) {
+        console.warn(`reCAPTCHA score too low: ${score} (threshold: ${threshold})`);
+        return NextResponse.json(
+          { success: false, error: "Verificare captcha eșuată - scor prea mic", score },
+          { status: 400 }
+        );
+      }
+
+      return NextResponse.json({ success: true, score });
     } else {
       return NextResponse.json(
         { success: false, error: "Verificare captcha eșuată", errors: data["error-codes"] },

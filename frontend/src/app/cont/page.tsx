@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useRef } from "react";
-import ReCAPTCHA from "react-google-recaptcha";
+import { useState, useCallback } from "react";
+import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
 import PageHeader from "@/components/ui/PageHeader";
 import { EnvelopeIcon, KeyIcon, ArrowPathIcon } from "@heroicons/react/24/outline";
 
@@ -56,22 +56,21 @@ export default function AccountPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
-  const recaptchaRef = useRef<ReCAPTCHA>(null);
+  const { executeRecaptcha } = useGoogleReCaptcha();
 
-  const handleSendCode = async (e: React.FormEvent) => {
+  const handleSendCode = useCallback(async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email) return;
+    if (!executeRecaptcha) {
+      setError("reCAPTCHA nu este încărcat. Reîncarcă pagina.");
+      return;
+    }
     setIsLoading(true);
     setError(null);
 
     try {
-      // Verify reCAPTCHA
-      const captchaToken = recaptchaRef.current?.getValue();
-      if (!captchaToken) {
-        setError("Te rugăm să completezi verificarea captcha.");
-        setIsLoading(false);
-        return;
-      }
+      // Get reCAPTCHA token
+      const captchaToken = await executeRecaptcha("send_verification_code");
 
       const captchaResponse = await fetch("/api/verify-captcha", {
         method: "POST",
@@ -81,7 +80,6 @@ export default function AccountPage() {
 
       if (!captchaResponse.ok) {
         setError("Verificarea captcha a eșuat. Te rugăm să încerci din nou.");
-        recaptchaRef.current?.reset();
         setIsLoading(false);
         return;
       }
@@ -98,7 +96,6 @@ export default function AccountPage() {
       if (response.ok) {
         setStep("code");
         setSuccessMessage(data.message || "Codul a fost trimis pe email.");
-        recaptchaRef.current?.reset();
       } else {
         setError(data.error?.message || "A apărut o eroare. Încearcă din nou.");
       }
@@ -108,7 +105,7 @@ export default function AccountPage() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [email, executeRecaptcha]);
 
   const handleVerifyCode = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -177,14 +174,6 @@ export default function AccountPage() {
                     placeholder="email@exemplu.ro"
                     required
                     className="w-full pl-12 pr-4 py-3 border rounded-xl focus:ring-2 focus:ring-[#2e6932] focus:border-transparent"
-                  />
-                </div>
-
-                <div className="flex justify-center">
-                  <ReCAPTCHA
-                    ref={recaptchaRef}
-                    sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY || ""}
-                    hl="ro"
                   />
                 </div>
 
