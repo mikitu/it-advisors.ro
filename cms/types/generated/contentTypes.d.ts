@@ -844,6 +844,45 @@ export interface ApiTestimonialTestimonial extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiVerificationCodeVerificationCode
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'verification_codes';
+  info: {
+    description: 'Email verification codes for order history access';
+    displayName: 'Verification Code';
+    pluralName: 'verification-codes';
+    singularName: 'verification-code';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    code: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 6;
+        minLength: 6;
+      }>;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    email: Schema.Attribute.Email & Schema.Attribute.Required;
+    expiresAt: Schema.Attribute.DateTime & Schema.Attribute.Required;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::verification-code.verification-code'
+    > &
+      Schema.Attribute.Private;
+    publishedAt: Schema.Attribute.DateTime;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    used: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
+    verifiedAt: Schema.Attribute.DateTime;
+  };
+}
+
 export interface PluginContentReleasesRelease
   extends Struct.CollectionTypeSchema {
   collectionName: 'strapi_releases';
@@ -1364,6 +1403,7 @@ declare module '@strapi/strapi' {
       'api::showcase.showcase': ApiShowcaseShowcase;
       'api::solution.solution': ApiSolutionSolution;
       'api::testimonial.testimonial': ApiTestimonialTestimonial;
+      'api::verification-code.verification-code': ApiVerificationCodeVerificationCode;
       'plugin::content-releases.release': PluginContentReleasesRelease;
       'plugin::content-releases.release-action': PluginContentReleasesReleaseAction;
       'plugin::i18n.locale': PluginI18NLocale;
