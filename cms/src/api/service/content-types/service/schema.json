@@ -8,7 +8,7 @@
     "description": "Servicii IT oferite de companie"
   },
   "options": {
-    "draftAndPublish": true
+    "draftAndPublish": false
   },
   "pluginOptions": {},
   "attributes": {

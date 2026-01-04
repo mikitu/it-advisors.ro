@@ -8,7 +8,7 @@
     "description": "Produse IT (hardware, software, cloud)"
   },
   "options": {
-    "draftAndPublish": true
+    "draftAndPublish": false
   },
   "pluginOptions": {},
   "attributes": {

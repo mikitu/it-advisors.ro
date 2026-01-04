@@ -440,7 +440,7 @@ export interface ApiBlogCategoryBlogCategory
     singularName: 'blog-category';
   };
   options: {
-    draftAndPublish: true;
+    draftAndPublish: false;
   };
   attributes: {
     createdAt: Schema.Attribute.DateTime;
@@ -471,7 +471,7 @@ export interface ApiBlogPostBlogPost extends Struct.CollectionTypeSchema {
     singularName: 'blog-post';
   };
   options: {
-    draftAndPublish: true;
+    draftAndPublish: false;
   };
   attributes: {
     category: Schema.Attribute.Relation<
@@ -614,7 +614,7 @@ export interface ApiProductCategoryProductCategory
     singularName: 'product-category';
   };
   options: {
-    draftAndPublish: true;
+    draftAndPublish: false;
   };
   attributes: {
     createdAt: Schema.Attribute.DateTime;
@@ -645,7 +645,7 @@ export interface ApiProductProduct extends Struct.CollectionTypeSchema {
     singularName: 'product';
   };
   options: {
-    draftAndPublish: true;
+    draftAndPublish: false;
   };
   attributes: {
     brand: Schema.Attribute.String;
@@ -694,7 +694,7 @@ export interface ApiServiceService extends Struct.CollectionTypeSchema {
     singularName: 'service';
   };
   options: {
-    draftAndPublish: true;
+    draftAndPublish: false;
   };
   attributes: {
     benefits: Schema.Attribute.JSON;
@@ -739,7 +739,7 @@ export interface ApiShowcaseShowcase extends Struct.CollectionTypeSchema {
     singularName: 'showcase';
   };
   options: {
-    draftAndPublish: true;
+    draftAndPublish: false;
   };
   attributes: {
     challenge: Schema.Attribute.Text;
@@ -780,7 +780,7 @@ export interface ApiSolutionSolution extends Struct.CollectionTypeSchema {
     singularName: 'solution';
   };
   options: {
-    draftAndPublish: true;
+    draftAndPublish: false;
   };
   attributes: {
     createdAt: Schema.Attribute.DateTime;
@@ -816,7 +816,7 @@ export interface ApiTestimonialTestimonial extends Struct.CollectionTypeSchema {
     singularName: 'testimonial';
   };
   options: {
-    draftAndPublish: true;
+    draftAndPublish: false;
   };
   attributes: {
     clientCompany: Schema.Attribute.String;

@@ -8,7 +8,7 @@
     "description": "Pachete de servicii IT"
   },
   "options": {
-    "draftAndPublish": true
+    "draftAndPublish": false
   },
   "pluginOptions": {},
   "attributes": {

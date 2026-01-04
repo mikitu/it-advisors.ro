@@ -8,7 +8,7 @@
     "description": "Testimoniale de la clienți"
   },
   "options": {
-    "draftAndPublish": true
+    "draftAndPublish": false
   },
   "pluginOptions": {},
   "attributes": {

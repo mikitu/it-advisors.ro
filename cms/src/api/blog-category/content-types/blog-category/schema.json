@@ -8,7 +8,7 @@
     "description": "Categorii pentru articolele de blog"
   },
   "options": {
-    "draftAndPublish": true
+    "draftAndPublish": false
   },
   "pluginOptions": {},
   "attributes": {
