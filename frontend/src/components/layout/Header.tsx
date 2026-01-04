@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
-import { ShoppingCartIcon } from "@heroicons/react/24/outline";
+import { ShoppingCartIcon, UserCircleIcon } from "@heroicons/react/24/outline";
 import { useCart } from "@/lib/cart-context";
 
 const navigation = [
@@ -59,10 +59,22 @@ export default function Header() {
                 {item.name}
               </Link>
             ))}
+            {/* Account link */}
+            <Link
+              href="/cont"
+              className={`ml-2 p-2 rounded-lg transition-colors ${
+                isActive("/cont")
+                  ? "text-[#2e6932] bg-[#2e6932]/10"
+                  : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"
+              }`}
+              title="Contul meu"
+            >
+              <UserCircleIcon className="h-6 w-6" />
+            </Link>
             {/* Cart button */}
             <button
               onClick={openCart}
-              className="relative ml-2 p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
+              className="relative p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
             >
               <ShoppingCartIcon className="h-6 w-6" />
               {itemCount > 0 && (
@@ -113,6 +125,18 @@ export default function Header() {
                   {item.name}
                 </Link>
               ))}
+              <Link
+                href="/cont"
+                className={`px-4 py-3 text-base font-medium rounded-lg flex items-center gap-2 ${
+                  isActive("/cont")
+                    ? "text-[#2e6932] bg-[#2e6932]/10"
+                    : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"
+                }`}
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                <UserCircleIcon className="h-5 w-5" />
+                Contul meu
+              </Link>
               <Link
                 href="/contact"
                 className="mt-2 mx-4 px-5 py-3 bg-[#2e6932] text-white text-center font-semibold rounded-xl hover:bg-[#3d8a42]"
