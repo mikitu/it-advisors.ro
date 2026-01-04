@@ -30,6 +30,16 @@ export default {
         middlewares: [],
       },
     },
+    {
+      method: 'POST',
+      path: '/verification-codes/cancel-order',
+      handler: 'verification-code.cancelOrder',
+      config: {
+        auth: false, // We handle auth via JWT in the controller
+        policies: [],
+        middlewares: [],
+      },
+    },
   ],
 };
 

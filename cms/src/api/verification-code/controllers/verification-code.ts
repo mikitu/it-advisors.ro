@@ -191,5 +191,64 @@ export default factories.createCoreController('api::verification-code.verificati
 
     return ctx.send({ success: true, email: decoded.email, orders });
   },
+
+  // Cancel an order
+  async cancelOrder(ctx) {
+    const authHeader = ctx.request.header.authorization;
+
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      return ctx.unauthorized('Token de acces lipsă');
+    }
+
+    const token = authHeader.substring(7);
+    const decoded = verifyAccessToken(token);
+
+    if (!decoded) {
+      return ctx.unauthorized('Token invalid sau expirat');
+    }
+
+    const { orderDocumentId } = ctx.request.body;
+
+    if (!orderDocumentId) {
+      return ctx.badRequest('ID-ul comenzii este obligatoriu');
+    }
+
+    // Find the order
+    const order = await strapi.documents('api::order.order').findOne({
+      documentId: orderDocumentId,
+    });
+
+    if (!order) {
+      return ctx.notFound('Comanda nu a fost găsită');
+    }
+
+    // Check if the order belongs to this user
+    if (order.customerEmail !== decoded.email) {
+      return ctx.forbidden('Nu ai permisiunea să anulezi această comandă');
+    }
+
+    // Check if order can be cancelled
+    if (order.status === 'cancelled') {
+      return ctx.badRequest('Comanda este deja anulată');
+    }
+
+    if (order.status === 'delivered') {
+      return ctx.badRequest('Nu poți anula o comandă livrată');
+    }
+
+    if (order.status === 'shipped') {
+      return ctx.badRequest('Nu poți anula o comandă expediată');
+    }
+
+    // Update order status to cancelled
+    await strapi.documents('api::order.order').update({
+      documentId: orderDocumentId,
+      data: {
+        status: 'cancelled',
+      },
+    });
+
+    return ctx.send({ success: true, message: 'Comanda a fost anulată' });
+  },
 }));
 

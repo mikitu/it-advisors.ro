@@ -3,7 +3,7 @@
 import { useState, useCallback, useEffect } from "react";
 import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
 import PageHeader from "@/components/ui/PageHeader";
-import { EnvelopeIcon, KeyIcon, ArrowPathIcon, ArrowRightOnRectangleIcon } from "@heroicons/react/24/outline";
+import { EnvelopeIcon, KeyIcon, ArrowPathIcon, ArrowRightOnRectangleIcon, XCircleIcon } from "@heroicons/react/24/outline";
 
 const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL || "http://localhost:1337";
 const TOKEN_KEY = "account_access_token";
@@ -58,6 +58,8 @@ export default function AccountPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const [cancelModal, setCancelModal] = useState<{ open: boolean; order: Order | null }>({ open: false, order: null });
+  const [isCancelling, setIsCancelling] = useState(false);
   const { executeRecaptcha } = useGoogleReCaptcha();
 
   // Check for existing token on mount
@@ -100,6 +102,43 @@ export default function AccountPage() {
     setEmail("");
     setCode("");
     setStep("email");
+  };
+
+  const handleCancelOrder = async () => {
+    if (!cancelModal.order) return;
+    const token = localStorage.getItem(TOKEN_KEY);
+    if (!token) return;
+
+    setIsCancelling(true);
+    try {
+      const response = await fetch(`${STRAPI_URL}/api/verification-codes/cancel-order`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ orderDocumentId: cancelModal.order.documentId }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.success) {
+        // Update local orders state
+        setOrders((prev) =>
+          prev.map((o) =>
+            o.documentId === cancelModal.order!.documentId ? { ...o, status: "cancelled" } : o
+          )
+        );
+        setCancelModal({ open: false, order: null });
+      } else {
+        setError(data.error?.message || data.error || "Nu s-a putut anula comanda.");
+      }
+    } catch (err) {
+      setError("A apărut o eroare. Vă rugăm încercați din nou.");
+      console.error(err);
+    } finally {
+      setIsCancelling(false);
+    }
   };
 
   const handleSendCode = useCallback(async (e: React.FormEvent) => {
@@ -349,9 +388,21 @@ export default function AccountPage() {
                           </div>
                         )}
 
-                        <div className="border-t mt-4 pt-4 flex justify-between font-semibold">
-                          <span>Total</span>
-                          <span>{formatPrice(order.total)}</span>
+                        <div className="border-t mt-4 pt-4 flex items-center justify-between">
+                          <div className="font-semibold">
+                            <span>Total: </span>
+                            <span>{formatPrice(order.total)}</span>
+                          </div>
+                          {/* Cancel button - only for pending/processing orders */}
+                          {(order.status === "pending" || order.status === "processing") && (
+                            <button
+                              onClick={() => setCancelModal({ open: true, order })}
+                              className="flex items-center gap-1 px-3 py-1.5 text-sm text-red-600 hover:text-red-700 hover:bg-red-50 border border-red-200 rounded-lg transition-colors"
+                            >
+                              <XCircleIcon className="w-4 h-4" />
+                              Anulează
+                            </button>
+                          )}
                         </div>
                       </div>
                     );
@@ -362,6 +413,52 @@ export default function AccountPage() {
           )}
         </div>
       </section>
+
+      {/* Cancel Order Modal */}
+      {cancelModal.open && cancelModal.order && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50">
+          <div className="bg-white rounded-2xl p-6 max-w-md w-full shadow-xl">
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">Anulează comanda</h3>
+            <p className="text-gray-600 mb-4">
+              Ești sigur că vrei să anulezi comanda{" "}
+              <span className="font-mono font-bold text-[#2e6932]">{cancelModal.order.orderNumber}</span>?
+            </p>
+            <p className="text-sm text-gray-500 mb-6">
+              Această acțiune nu poate fi anulată.
+            </p>
+            {error && <p className="text-red-600 text-sm mb-4">{error}</p>}
+            <div className="flex gap-3">
+              <button
+                onClick={() => {
+                  setCancelModal({ open: false, order: null });
+                  setError(null);
+                }}
+                disabled={isCancelling}
+                className="flex-1 px-4 py-2 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-xl transition-colors disabled:opacity-50"
+              >
+                Înapoi
+              </button>
+              <button
+                onClick={handleCancelOrder}
+                disabled={isCancelling}
+                className="flex-1 px-4 py-2 text-white bg-red-600 hover:bg-red-700 rounded-xl transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+              >
+                {isCancelling ? (
+                  <>
+                    <span className="animate-spin w-4 h-4 border-2 border-white border-t-transparent rounded-full"></span>
+                    Se anulează...
+                  </>
+                ) : (
+                  <>
+                    <XCircleIcon className="w-4 h-4" />
+                    Confirmă anularea
+                  </>
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 }
