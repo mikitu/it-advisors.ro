@@ -53,7 +53,7 @@ function SuccessContent() {
               Continuă cumpărăturile
             </Link>
             <Link
-              href="/cont"
+              href="/account"
               className="flex-1 px-6 py-3 bg-[#2e6932] text-white font-medium rounded-xl hover:bg-[#245228] transition-colors"
             >
               Vezi comenzile mele
