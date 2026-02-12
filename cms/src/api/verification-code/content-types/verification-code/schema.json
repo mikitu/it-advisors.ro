@@ -1,0 +1,38 @@
+{
+  "kind": "collectionType",
+  "collectionName": "verification_codes",
+  "info": {
+    "singularName": "verification-code",
+    "pluralName": "verification-codes",
+    "displayName": "Verification Code",
+    "description": "Email verification codes for order history access"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "email": {
+      "type": "email",
+      "required": true
+    },
+    "code": {
+      "type": "string",
+      "required": true,
+      "maxLength": 6,
+      "minLength": 6
+    },
+    "expiresAt": {
+      "type": "datetime",
+      "required": true
+    },
+    "used": {
+      "type": "boolean",
+      "default": false
+    },
+    "verifiedAt": {
+      "type": "datetime"
+    }
+  }
+}
+

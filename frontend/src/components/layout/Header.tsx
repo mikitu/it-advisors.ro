@@ -4,6 +4,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
+import { ShoppingCartIcon, UserCircleIcon } from "@heroicons/react/24/outline";
+import { useCart } from "@/lib/cart-context";
 
 const navigation = [
   { name: "Acasă", href: "/" },
@@ -17,6 +19,7 @@ const navigation = [
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const pathname = usePathname();
+  const { openCart, itemCount } = useCart();
 
   const isActive = (href: string) => {
     if (href === "/") return pathname === "/";
@@ -56,9 +59,33 @@ export default function Header() {
                 {item.name}
               </Link>
             ))}
+            {/* Account link */}
+            <Link
+              href="/account"
+              className={`ml-2 p-2 rounded-lg transition-colors ${
+                isActive("/account")
+                  ? "text-[#2e6932] bg-[#2e6932]/10"
+                  : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"
+              }`}
+              title="Contul meu"
+            >
+              <UserCircleIcon className="h-6 w-6" />
+            </Link>
+            {/* Cart button */}
+            <button
+              onClick={openCart}
+              className="relative p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
+            >
+              <ShoppingCartIcon className="h-6 w-6" />
+              {itemCount > 0 && (
+                <span className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center bg-[#2e6932] text-white text-xs font-bold rounded-full">
+                  {itemCount > 9 ? "9+" : itemCount}
+                </span>
+              )}
+            </button>
             <Link
               href="/contact"
-              className="ml-4 px-5 py-2.5 bg-[#2e6932] text-white text-sm font-semibold rounded-xl hover:bg-[#3d8a42] hover:shadow-lg hover:shadow-[#2e6932]/25 transition-all duration-200"
+              className="ml-2 px-5 py-2.5 bg-[#2e6932] text-white text-sm font-semibold rounded-xl hover:bg-[#3d8a42] hover:shadow-lg hover:shadow-[#2e6932]/25 transition-all duration-200"
             >
               Solicită ofertă
             </Link>
@@ -98,6 +125,18 @@ export default function Header() {
                   {item.name}
                 </Link>
               ))}
+              <Link
+                href="/account"
+                className={`px-4 py-3 text-base font-medium rounded-lg flex items-center gap-2 ${
+                  isActive("/account")
+                    ? "text-[#2e6932] bg-[#2e6932]/10"
+                    : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"
+                }`}
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                <UserCircleIcon className="h-5 w-5" />
+                Contul meu
+              </Link>
               <Link
                 href="/contact"
                 className="mt-2 mx-4 px-5 py-3 bg-[#2e6932] text-white text-center font-semibold rounded-xl hover:bg-[#3d8a42]"

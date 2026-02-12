@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useCallback } from "react";
+import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
 import PageHeader from "@/components/ui/PageHeader";
 
 export default function ContactPage() {
@@ -11,12 +12,49 @@ export default function ContactPage() {
     company: "",
     message: "",
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<"idle" | "success" | "error">("idle");
+  const [error, setError] = useState<string | null>(null);
+  const { executeRecaptcha } = useGoogleReCaptcha();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = useCallback(async (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: Integrate with Strapi or email service
-    alert("Mulțumim! Te vom contacta în curând.");
-  };
+    if (!executeRecaptcha) {
+      setError("reCAPTCHA nu este încărcat. Reîncarcă pagina.");
+      return;
+    }
+    setIsSubmitting(true);
+    setError(null);
+
+    try {
+      // Get reCAPTCHA token
+      const captchaToken = await executeRecaptcha("contact");
+
+      const captchaResponse = await fetch("/api/verify-captcha", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ token: captchaToken }),
+      });
+
+      if (!captchaResponse.ok) {
+        setError("Verificarea captcha a eșuat. Te rugăm să încerci din nou.");
+        setIsSubmitting(false);
+        return;
+      }
+
+      // TODO: Send contact form to Strapi or email service
+      // For now, simulate success
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
+      setSubmitStatus("success");
+      setFormData({ name: "", email: "", phone: "", company: "", message: "" });
+    } catch {
+      setError("A apărut o eroare. Te rugăm să încerci din nou.");
+      setSubmitStatus("error");
+    } finally {
+      setIsSubmitting(false);
+    }
+  }, [executeRecaptcha]);
 
   return (
     <>
@@ -90,11 +128,25 @@ export default function ContactPage() {
                     placeholder="Descrie-ne cum te putem ajuta..."
                   />
                 </div>
+
+                {/* Error message */}
+                {error && (
+                  <p className="text-red-600 text-sm">{error}</p>
+                )}
+
+                {/* Success message */}
+                {submitStatus === "success" && (
+                  <div className="p-4 bg-green-50 border border-green-200 rounded-xl">
+                    <p className="text-green-800 font-medium">✅ Mulțumim! Mesajul tău a fost trimis. Te vom contacta în curând.</p>
+                  </div>
+                )}
+
                 <button
                   type="submit"
-                  className="w-full sm:w-auto px-8 py-4 bg-[#2e6932] text-white font-semibold rounded-xl hover:bg-[#3d8a42] transition-colors"
+                  disabled={isSubmitting}
+                  className="w-full sm:w-auto px-8 py-4 bg-[#2e6932] text-white font-semibold rounded-xl hover:bg-[#3d8a42] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  Trimite mesajul
+                  {isSubmitting ? "Se trimite..." : "Trimite mesajul"}
                 </button>
               </form>
             </div>

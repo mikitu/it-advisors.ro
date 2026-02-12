@@ -1,65 +1,26 @@
 import Link from "next/link";
 import PageHeader from "@/components/ui/PageHeader";
-
-const blogPosts = [
-  {
-    slug: "de-ce-sa-externalizezi-serviciile-it",
-    title: "De ce să externalizezi serviciile IT ale companiei tale",
-    excerpt: "Externalizarea IT-ului poate reduce costurile cu până la 40% și îți oferă acces la expertiză de top. Descoperă toate avantajele.",
-    date: "15 Decembrie 2024",
-    category: "Sfaturi",
-    readTime: "5 min",
-  },
-  {
-    slug: "securitate-cibernetica-2024",
-    title: "Ghid de securitate cibernetică pentru IMM-uri în 2024",
-    excerpt: "Amenințările cibernetice evoluează constant. Află cum să îți protejezi afacerea cu măsuri simple dar eficiente.",
-    date: "10 Decembrie 2024",
-    category: "Securitate",
-    readTime: "8 min",
-  },
-  {
-    slug: "migrare-cloud-pas-cu-pas",
-    title: "Migrarea în cloud: ghid pas cu pas pentru companii",
-    excerpt: "Totul despre migrarea infrastructurii în cloud - de la planificare la implementare și optimizare.",
-    date: "5 Decembrie 2024",
-    category: "Cloud",
-    readTime: "10 min",
-  },
-  {
-    slug: "backup-date-importanta",
-    title: "De ce backup-ul datelor îți poate salva afacerea",
-    excerpt: "Am văzut companii care au pierdut totul din cauza lipsei unui backup. Nu lăsa să ți se întâmple și ție.",
-    date: "28 Noiembrie 2024",
-    category: "Experiențe",
-    readTime: "6 min",
-  },
-  {
-    slug: "telefonie-voip-avantaje",
-    title: "Telefonia VoIP: cum am redus costurile unui client cu 70%",
-    excerpt: "Studiu de caz: implementarea unei soluții VoIP pentru o companie cu 50 de angajați.",
-    date: "20 Noiembrie 2024",
-    category: "Studii de caz",
-    readTime: "7 min",
-  },
-  {
-    slug: "windows-11-migrare-enterprise",
-    title: "Migrarea la Windows 11 în mediul enterprise",
-    excerpt: "Ce trebuie să știi înainte de a face upgrade-ul la Windows 11 în compania ta.",
-    date: "15 Noiembrie 2024",
-    category: "Sfaturi",
-    readTime: "5 min",
-  },
-];
-
-const categories = ["Toate", "Sfaturi", "Securitate", "Cloud", "Experiențe", "Studii de caz"];
+import { getBlogPosts, getBlogCategories, type BlogPost, type BlogCategory } from "@/lib/strapi";
 
 export const metadata = {
   title: "Blog | IT Advisors",
   description: "Sfaturi IT, experiențe din teren și ghiduri practice de la echipa IT Advisors.",
 };
 
-export default function BlogPage() {
+export default async function BlogPage() {
+  let blogPosts: BlogPost[] = [];
+  let blogCategories: BlogCategory[] = [];
+
+  try {
+    [blogPosts, blogCategories] = await Promise.all([
+      getBlogPosts(),
+      getBlogCategories()
+    ]);
+  } catch (error) {
+    console.error("Failed to fetch blog data from Strapi:", error);
+  }
+
+  const categories = ["Toate", ...blogCategories.map(c => c.name)];
   return (
     <>
       <PageHeader
@@ -99,7 +60,7 @@ export default function BlogPage() {
                 <div className="p-6">
                   <div className="flex items-center gap-3 mb-3">
                     <span className="px-3 py-1 bg-[#2e6932]/10 text-[#2e6932] text-xs font-medium rounded-full">
-                      {post.category}
+                      {post.category?.name || 'Necategorizat'}
                     </span>
                     <span className="text-sm text-gray-500">{post.readTime} citire</span>
                   </div>
@@ -108,7 +69,7 @@ export default function BlogPage() {
                   </h2>
                   <p className="text-gray-600 text-sm mb-4 line-clamp-2">{post.excerpt}</p>
                   <div className="flex items-center justify-between">
-                    <span className="text-sm text-gray-500">{post.date}</span>
+                    <span className="text-sm text-gray-500">{post.publishedDate}</span>
                     <span className="text-[#2e6932] text-sm font-medium group-hover:underline">
                       Citește →
                     </span>
