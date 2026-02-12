@@ -43,13 +43,30 @@ log('INFO', 'Environment variables:', {
 
 log('INFO', 'Starting Strapi...');
 
-strapi({ distDir: './dist' })
-  .start()
-  .then(() => {
-    log('INFO', 'Strapi started successfully');
-  })
-  .catch((err) => {
-    log('ERROR', 'Failed to start Strapi', { error: err.message, stack: err.stack });
-    process.exit(1);
-  });
+// Catch uncaught exceptions
+process.on('uncaughtException', (err) => {
+  log('ERROR', 'Uncaught Exception', { error: err.message, stack: err.stack });
+});
+
+process.on('unhandledRejection', (reason, promise) => {
+  log('ERROR', 'Unhandled Rejection', { reason: String(reason) });
+});
+
+try {
+  const strapiInstance = strapi({ distDir: './dist' });
+  log('INFO', 'Strapi instance created');
+
+  strapiInstance
+    .start()
+    .then(() => {
+      log('INFO', 'Strapi started successfully');
+    })
+    .catch((err) => {
+      log('ERROR', 'Failed to start Strapi', { error: err.message, stack: err.stack });
+      process.exit(1);
+    });
+} catch (err) {
+  log('ERROR', 'Failed to create Strapi instance', { error: err.message, stack: err.stack });
+  process.exit(1);
+}
 
