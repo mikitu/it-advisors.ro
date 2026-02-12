@@ -5,6 +5,9 @@ node_modules/
 
 # server logs
 server.log
+
+# cPanel generated files
+.htaccess
 .pnp.cjs
 
 # Build outputs
