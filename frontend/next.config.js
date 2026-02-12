@@ -1,9 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Disable Turbopack for build (cPanel symlink compatibility)
-  experimental: {
-    turbo: false,
-  },
+  /* config options here */
 };
 
 module.exports = nextConfig;
