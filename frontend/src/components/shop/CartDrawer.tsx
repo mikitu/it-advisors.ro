@@ -1,8 +1,7 @@
 "use client";
 
-import { Fragment } from "react";
 import Link from "next/link";
-import { Dialog, Transition } from "@headlessui/react";
+import { Dialog, DialogPanel, DialogTitle, Transition, TransitionChild } from "@headlessui/react";
 import { XMarkIcon, TrashIcon, MinusIcon, PlusIcon } from "@heroicons/react/24/outline";
 import { useCart } from "@/lib/cart-context";
 
@@ -14,23 +13,23 @@ export default function CartDrawer() {
   const { items, isOpen, closeCart, removeItem, updateQuantity, itemCount, subtotal, shippingCost, total } = useCart();
 
   return (
-    <Transition.Root show={isOpen} as={Fragment}>
+    <Transition show={isOpen}>
       <Dialog as="div" className="relative z-50" onClose={closeCart}>
-        <Transition.Child as={Fragment} enter="ease-in-out duration-300" enterFrom="opacity-0" enterTo="opacity-100" leave="ease-in-out duration-300" leaveFrom="opacity-100" leaveTo="opacity-0">
+        <TransitionChild enter="ease-in-out duration-300" enterFrom="opacity-0" enterTo="opacity-100" leave="ease-in-out duration-300" leaveFrom="opacity-100" leaveTo="opacity-0">
           <div className="fixed inset-0 bg-black/50 transition-opacity" />
-        </Transition.Child>
+        </TransitionChild>
 
         <div className="fixed inset-0 overflow-hidden">
           <div className="absolute inset-0 overflow-hidden">
             <div className="pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-10">
-              <Transition.Child as={Fragment} enter="transform transition ease-in-out duration-300" enterFrom="translate-x-full" enterTo="translate-x-0" leave="transform transition ease-in-out duration-300" leaveFrom="translate-x-0" leaveTo="translate-x-full">
-                <Dialog.Panel className="pointer-events-auto w-screen max-w-md">
+              <TransitionChild enter="transform transition ease-in-out duration-300" enterFrom="translate-x-full" enterTo="translate-x-0" leave="transform transition ease-in-out duration-300" leaveFrom="translate-x-0" leaveTo="translate-x-full">
+                <DialogPanel className="pointer-events-auto w-screen max-w-md">
                   <div className="flex h-full flex-col bg-white shadow-xl">
                     {/* Header */}
                     <div className="flex items-center justify-between px-4 py-6 sm:px-6 border-b">
-                      <Dialog.Title className="text-lg font-semibold text-gray-900">
+                      <DialogTitle className="text-lg font-semibold text-gray-900">
                         Coș de cumpărături ({itemCount})
-                      </Dialog.Title>
+                      </DialogTitle>
                       <button type="button" className="text-gray-400 hover:text-gray-500" onClick={closeCart}>
                         <XMarkIcon className="h-6 w-6" />
                       </button>
@@ -104,13 +103,13 @@ export default function CartDrawer() {
                       </div>
                     )}
                   </div>
-                </Dialog.Panel>
-              </Transition.Child>
+                </DialogPanel>
+              </TransitionChild>
             </div>
           </div>
         </div>
       </Dialog>
-    </Transition.Root>
+    </Transition>
   );
 }
 

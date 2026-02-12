@@ -4,6 +4,9 @@ import { motion, AnimatePresence } from "framer-motion";
 import { usePathname } from "next/navigation";
 import { ReactNode } from "react";
 
+// Type workaround for framer-motion v12 + React 19 compatibility
+type MotionChildren = React.ReactNode & (string | number | boolean | null | undefined);
+
 interface PageTransitionProps {
   children: ReactNode;
 }
@@ -60,7 +63,7 @@ export default function PageTransition({ children }: PageTransitionProps) {
         variants={pageVariants}
         className="min-h-screen"
       >
-        {children}
+        {children as MotionChildren}
       </motion.div>
     </AnimatePresence>
   );
@@ -70,12 +73,12 @@ export default function PageTransition({ children }: PageTransitionProps) {
 export { pageVariants, slideUpVariants };
 
 // Reusable animated section wrapper
-export function AnimatedSection({ 
-  children, 
+export function AnimatedSection({
+  children,
   className = "",
-  delay = 0 
-}: { 
-  children: ReactNode; 
+  delay = 0
+}: {
+  children: ReactNode;
   className?: string;
   delay?: number;
 }) {
@@ -91,17 +94,17 @@ export function AnimatedSection({
       }}
       className={className}
     >
-      {children}
+      {children as MotionChildren}
     </motion.div>
   );
 }
 
 // Stagger container for list animations
-export function StaggerContainer({ 
-  children, 
-  className = "" 
-}: { 
-  children: ReactNode; 
+export function StaggerContainer({
+  children,
+  className = ""
+}: {
+  children: ReactNode;
   className?: string;
 }) {
   return (
@@ -119,17 +122,17 @@ export function StaggerContainer({
       }}
       className={className}
     >
-      {children}
+      {children as MotionChildren}
     </motion.div>
   );
 }
 
 // Stagger item for use inside StaggerContainer
-export function StaggerItem({ 
-  children, 
-  className = "" 
-}: { 
-  children: ReactNode; 
+export function StaggerItem({
+  children,
+  className = ""
+}: {
+  children: ReactNode;
   className?: string;
 }) {
   return (
@@ -148,7 +151,7 @@ export function StaggerItem({
       }}
       className={className}
     >
-      {children}
+      {children as MotionChildren}
     </motion.div>
   );
 }

@@ -46,7 +46,7 @@ export default function TransitionWrapper({ children }: TransitionWrapperProps) 
           }
         }}
       >
-        {children}
+        {children as React.ReactNode & (string | number | boolean | null | undefined)}
       </motion.div>
     </AnimatePresence>
   );

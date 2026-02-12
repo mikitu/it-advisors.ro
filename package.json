@@ -1,0 +1,21 @@
+{
+  "name": "it-advisors",
+  "private": true,
+  "scripts": {
+    "dev:frontend": "pnpm --filter frontend dev",
+    "dev:cms": "pnpm --filter cms develop",
+    "build:frontend": "pnpm --filter frontend build",
+    "build:cms": "pnpm --filter cms build",
+    "dev": "concurrently \"pnpm dev:frontend\" \"pnpm dev:cms\""
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "@swc/core",
+      "sharp",
+      "esbuild",
+      "unrs-resolver",
+      "core-js-pure"
+    ]
+  }
+}
+

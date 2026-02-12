@@ -1,7 +1,6 @@
 "use client";
 
-import { Fragment } from "react";
-import { Menu, Transition, Disclosure } from "@headlessui/react";
+import { Menu, MenuButton, MenuItem, MenuItems, Transition, Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/react";
 import { ChevronDownIcon, FunnelIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import type { ProductCategory } from "@/lib/strapi";
 
@@ -81,12 +80,11 @@ export default function ProductFilters({
 
         {/* Sort dropdown */}
         <Menu as="div" className="relative">
-          <Menu.Button className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+          <MenuButton className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
             Sortare: {sortOptions.find((o) => o.value === sortBy)?.label}
             <ChevronDownIcon className="h-4 w-4" />
-          </Menu.Button>
+          </MenuButton>
           <Transition
-            as={Fragment}
             enter="transition ease-out duration-100"
             enterFrom="transform opacity-0 scale-95"
             enterTo="transform opacity-100 scale-100"
@@ -94,22 +92,22 @@ export default function ProductFilters({
             leaveFrom="transform opacity-100 scale-100"
             leaveTo="transform opacity-0 scale-95"
           >
-            <Menu.Items className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-xl shadow-lg z-10 overflow-hidden">
+            <MenuItems className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-xl shadow-lg z-10 overflow-hidden">
               {sortOptions.map((option) => (
-                <Menu.Item key={option.value}>
-                  {({ active }) => (
+                <MenuItem key={option.value}>
+                  {({ focus }) => (
                     <button
                       onClick={() => onSortChange(option.value)}
                       className={`w-full text-left px-4 py-2 text-sm ${
-                        active ? "bg-gray-50" : ""
+                        focus ? "bg-gray-50" : ""
                       } ${sortBy === option.value ? "text-[#2e6932] font-medium" : "text-gray-700"}`}
                     >
                       {option.label}
                     </button>
                   )}
-                </Menu.Item>
+                </MenuItem>
               ))}
-            </Menu.Items>
+            </MenuItems>
           </Transition>
         </Menu>
       </div>
@@ -119,12 +117,12 @@ export default function ProductFilters({
         {/* Categories */}
         <Disclosure defaultOpen>
           {({ open }) => (
-            <div className="min-w-[200px]">
-              <Disclosure.Button className="flex items-center justify-between w-full text-left text-sm font-semibold text-gray-900 mb-3">
+            <div className="min-w-50">
+              <DisclosureButton className="flex items-center justify-between w-full text-left text-sm font-semibold text-gray-900 mb-3">
                 Categorie
                 <ChevronDownIcon className={`h-4 w-4 transition-transform ${open ? "rotate-180" : ""}`} />
-              </Disclosure.Button>
-              <Disclosure.Panel className="flex flex-wrap gap-2">
+              </DisclosureButton>
+              <DisclosurePanel className="flex flex-wrap gap-2">
                 {categories.map((cat) => (
                   <button
                     key={cat.id}
@@ -138,7 +136,7 @@ export default function ProductFilters({
                     {cat.name}
                   </button>
                 ))}
-              </Disclosure.Panel>
+              </DisclosurePanel>
             </div>
           )}
         </Disclosure>
@@ -146,12 +144,12 @@ export default function ProductFilters({
         {/* Brands */}
         <Disclosure defaultOpen>
           {({ open }) => (
-            <div className="min-w-[200px]">
-              <Disclosure.Button className="flex items-center justify-between w-full text-left text-sm font-semibold text-gray-900 mb-3">
+            <div className="min-w-50">
+              <DisclosureButton className="flex items-center justify-between w-full text-left text-sm font-semibold text-gray-900 mb-3">
                 Brand
                 <ChevronDownIcon className={`h-4 w-4 transition-transform ${open ? "rotate-180" : ""}`} />
-              </Disclosure.Button>
-              <Disclosure.Panel className="flex flex-wrap gap-2">
+              </DisclosureButton>
+              <DisclosurePanel className="flex flex-wrap gap-2">
                 {brands.map((brand) => (
                   <button
                     key={brand}
@@ -165,7 +163,7 @@ export default function ProductFilters({
                     {brand}
                   </button>
                 ))}
-              </Disclosure.Panel>
+              </DisclosurePanel>
             </div>
           )}
         </Disclosure>
