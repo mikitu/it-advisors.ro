@@ -6,7 +6,7 @@
  * This file starts the Strapi application
  */
 
-const strapi = require('@strapi/strapi');
+const { createStrapi } = require('@strapi/strapi');
 const fs = require('fs');
 const path = require('path');
 
@@ -53,7 +53,7 @@ process.on('unhandledRejection', (reason, promise) => {
 });
 
 try {
-  const strapiInstance = strapi({ distDir: './dist' });
+  const strapiInstance = createStrapi({ distDir: './dist' });
   log('INFO', 'Strapi instance created');
 
   strapiInstance
