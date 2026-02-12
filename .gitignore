@@ -2,6 +2,9 @@
 node_modules/
 .pnp
 .pnp.js
+
+# server logs
+server.log
 .pnp.cjs
 
 # Build outputs
